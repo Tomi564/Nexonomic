@@ -2,59 +2,53 @@
 // src/components/About.astro
 ---
 
-<section id="about" class="py-24 bg-deep-bg relative">
+<section id="about" class="py-24 bg-deep-bg relative overflow-hidden">
   <div class="max-w-7xl mx-auto px-6">
-    
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
       
       <div class="relative order-2 md:order-1">
-        <div class="absolute -top-4 -left-4 w-full h-full border-2 border-muted/30 z-0"></div>
+        <div class="absolute -top-4 -left-4 w-full h-full border border-accent/20 rounded-[3rem] z-0"></div>
         
-        <div class="relative z-10 h-[500px] bg-gray-800 overflow-hidden">
+        <div class="relative z-10 aspect-[4/5] md:aspect-square overflow-hidden rounded-[3rem] shadow-2xl">
             <img 
                 src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" 
-                alt="Perspectiva arquitectónica" 
-                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-in-out"
+                alt="Arquitectura Nexonomic" 
+                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out"
             />
             
-            <div class="absolute bottom-6 right-6 bg-deep-bg/90 backdrop-blur border border-white/10 p-4 max-w-[200px]">
-                <p class="font-serif text-3xl text-accent">15+</p>
-                <p class="font-sans text-sm text-gray-400 uppercase tracking-wider mt-1">Años de análisis</p>
+            <div class="absolute bottom-8 right-8 bg-deep-bg/90 backdrop-blur-md border border-white/10 p-6 rounded-2xl">
+                <p class="font-serif text-4xl text-accent mb-1">15+</p>
+                <p class="font-sans text-xs text-gray-400 uppercase tracking-widest font-bold">Líderes de opinión</p>
             </div>
         </div>
       </div>
 
       <div class="order-1 md:order-2">
-        <h2 class="font-sans text-accent tracking-widest uppercase text-sm mb-4 font-semibold">
-          El Propósito
-        </h2>
-        
+        <h2 class="font-sans text-accent tracking-[0.2em] uppercase text-xs mb-4 font-bold">El Propósito</h2>
         <h3 class="font-serif text-4xl md:text-5xl text-white mb-8 leading-tight">
           Más allá de los números: <br/>
-          <span class="italic text-muted">la ética del mercado.</span>
+          <span class="text-gray-500 italic font-light">la ética del mercado.</span>
         </h3>
         
-        <div class="space-y-6 text-gray-300 font-sans text-lg leading-relaxed">
+        <div class="space-y-6 text-gray-400 font-sans text-lg leading-relaxed">
           <p>
-            Este proyecto nace de la necesidad de cerrar la brecha entre la teoría económica académica y la realidad tangible de nuestra sociedad. No se trata solo de índices bursátiles, sino de cómo las decisiones macroeconómicas moldean la vida cotidiana.
+            Nexonomic nace de la necesidad de cerrar la brecha entre la teoría económica académica y la realidad tangible de nuestra sociedad. No se trata solo de índices bursátiles, sino de cómo las decisiones macroeconómicas moldean la vida cotidiana.
           </p>
           <p>
-            Busco generar conversaciones profundas con líderes de opinión, empresarios y académicos que se atrevan a cuestionar el <i>status quo</i>.
+            Busco generar conversaciones profundas con líderes de opinión, empresarios y académicos que se atrevan a cuestionar el <i class="text-white">status quo</i>.
           </p>
         </div>
 
-        <div class="mt-10 pt-8 border-t border-white/10">
-          <p class="text-white mb-4 font-serif italic">¿Te interesa participar en una entrevista?</p>
-          <a href="#contact" class="inline-flex items-center gap-3 text-white font-bold hover:text-accent transition-colors group">
-            <span class="border-b-2 border-action group-hover:border-accent pb-1 transition-colors">
+        <div class="mt-12 pt-8 border-t border-white/10">
+          <a href="#contact" class="inline-flex items-center gap-4 group">
+            <span class="px-6 py-3 bg-white/5 hover:bg-accent hover:text-deep-bg text-white font-bold rounded-full transition-all duration-300 border border-white/10">
               Agendar Conversación
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-accent group-hover:translate-x-2 transition-transform">
               <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
             </svg>
           </a>
         </div>
-
       </div>
 
     </div>

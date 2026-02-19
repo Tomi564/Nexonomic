@@ -2,11 +2,11 @@
 // src/components/Hero.astro
 ---
 
-<section class="relative h-screen w-full overflow-hidden flex items-center justify-center">
+<section class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-deep-bg">
   
   <div class="absolute inset-0 w-full h-full z-0">
     <video 
-      class="w-full h-full object-cover opacity-60" 
+      class="w-full h-full object-cover opacity-40 grayscale" 
       autoplay 
       muted 
       loop 
@@ -15,51 +15,46 @@
       <source src="https://videos.pexels.com/video-files/3129671/3129671-hd_1920_1080_30fps.mp4" type="video/mp4" />
     </video>
     
-    <div class="absolute inset-0 bg-deep-bg/70 z-10"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-deep-bg/20 via-deep-bg/80 to-deep-bg z-10"></div>
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-action/20 rounded-full blur-[120px] z-10"></div>
+    <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-accent/10 rounded-full blur-[120px] z-10"></div>
   </div>
 
-  <div class="relative z-20 text-center px-4 max-w-4xl mx-auto mt-16">
-    <p class="font-sans text-accent tracking-[0.2em] uppercase text-sm mb-4 animate-fade-in-up">
-      Análisis . Economía . Filosofía
+  <div class="relative z-20 text-center px-6 max-w-4xl mx-auto mt-16">
+    <p class="font-sans text-accent tracking-[0.3em] uppercase text-xs mb-6 animate-fade-in-up font-bold">
+      Análisis • Economía • Filosofía
     </p>
     
-    <h1 class="font-serif text-5xl md:text-7xl text-white font-bold leading-tight mb-6 animate-fade-in-up delay-100">
+    <h1 class="font-serif text-5xl md:text-7xl text-white leading-[1.1] mb-8 animate-fade-in-up delay-100">
       Repensando el <br/>
-      <span class="italic font-light">futuro económico</span>
+      <span class="text-accent italic font-light">futuro económico</span>
     </h1>
     
-    <p class="font-sans text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in-up delay-200">
+    <p class="font-sans text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed animate-fade-in-up delay-200">
       Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.
     </p>
     
-    <div class="flex flex-col md:flex-row gap-4 justify-center animate-fade-in-up delay-300">
-      <a href="#about" class="px-8 py-3 bg-action hover:bg-accent text-white font-sans font-semibold rounded-sm transition-all duration-300 transform hover:-translate-y-1">
+    <div class="flex flex-col sm:flex-row gap-5 justify-center animate-fade-in-up delay-300">
+      <a href="#about" class="px-10 py-4 bg-action hover:bg-accent text-white font-sans font-bold rounded-full transition-all duration-500 transform hover:-translate-y-1 shadow-lg shadow-action/20">
         Conocer el Proyecto
       </a>
-      <a href="#blog" class="px-8 py-3 border border-white/30 hover:bg-white/10 text-white font-sans rounded-sm transition-all duration-300">
+      <a href="#blog" class="px-10 py-4 border border-white/20 hover:bg-white/5 text-white font-sans font-bold rounded-full transition-all duration-500">
         Leer Artículos
       </a>
     </div>
   </div>
-
 </section>
 
 <style>
-  /* Animación simple de entrada */
   .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-    opacity: 0;
-    transform: translateY(20px);
+    animation: fadeInUp 1s ease-out forwards;
   }
-  
   .delay-100 { animation-delay: 0.1s; }
-  .delay-200 { animation-delay: 0.3s; }
-  .delay-300 { animation-delay: 0.5s; }
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-300 { animation-delay: 0.3s; }
 
   @keyframes fadeInUp {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
