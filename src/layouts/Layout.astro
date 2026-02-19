@@ -1,59 +1,71 @@
 ---
+// 1. SIEMPRE debe empezar con los tres guiones
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
 interface Props {
 	title: string;
 }
 
 const { title } = Astro.props;
+const description = "Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.";
+const ogImage = "/Nexonomic Logo_K-03.jpg"; // Asegurate que esté en public/
 ---
 
 <!doctype html>
 <html lang="es" class="scroll-smooth">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Sitio oficial sobre economía y filosofía." />
+		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
-		
+		<title>{title}</title>
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Lora:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-		
-		<title>{title}</title>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 	</head>
-	<body class="bg-deep-bg text-white font-sans antialiased">
-		<slot />
+	<body class="bg-deep-bg text-white font-sans antialiased selection:bg-accent selection:text-deep-bg">
+		<main>
+			<slot />
+		</main>
 	</body>
 </html>
 
 <style is:global>
 	html {
 		background: #050708;
+		scrollbar-width: thin;
+		scrollbar-color: #1f2937 #050708;
 	}
 
-	/* Personalización de la barra de scroll (Webkit: Chrome, Safari, Edge) */
+	/* Personalización de la barra de scroll (Webkit) */
 	::-webkit-scrollbar {
 		width: 10px;
 	}
 
 	::-webkit-scrollbar-track {
-		background: #050708; /* Color del fondo de la barra */
+		background: #050708;
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: #1f2937; /* Color gris oscuro para la barra */
+		background: #1f2937; 
 		border-radius: 5px;
-		border: 2px solid #050708; /* Borde para que se vea separada */
+		border: 2px solid #050708;
 	}
 
 	::-webkit-scrollbar-thumb:hover {
-		background: #3cc2a2; /* Se ilumina con tu color Accent al agarrarla */
-	}
-
-	/* Estilos para Firefox */
-	html {
-		scrollbar-width: thin;
-		scrollbar-color: #1f2937 #050708;
+		background: #3cc2a2; /* Color Accent */
 	}
 </style>
-

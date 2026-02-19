@@ -3,7 +3,11 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'local',
+    kind: 'github', // Cambiamos 'local' por 'github'
+    repo: {
+      owner: 'tomasmartinez564', // Tu usuario de GitHub
+      name: 'Nexonomic',         // El nombre exacto de tu repositorio
+    },
   },
   collections: {
     noticias: collection({

@@ -19,63 +19,50 @@
       </p>
     </div>
 
-    <form class="space-y-6 bg-white/5 p-8 md:p-12 rounded-sm border border-white/10 backdrop-blur-sm">
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="flex flex-col gap-2">
-          <label for="name" class="text-sm text-gray-400 font-sans">Nombre Completo</label>
-          <input 
-            type="text" 
-            id="name" 
-            name="name" 
-            placeholder="Juan Pérez"
-            class="bg-black/40 border border-white/10 text-white p-3 rounded-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
-            required
-          />
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label for="email" class="text-sm text-gray-400 font-sans">Correo Electrónico</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            placeholder="juan@ejemplo.com"
-            class="bg-black/40 border border-white/10 text-white p-3 rounded-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
-            required
-          />
-        </div>
+    <form 
+      name="contacto" 
+      method="POST" 
+      data-netlify="true" 
+      data-netlify-honeypot="bot-field"
+      class="space-y-6 bg-white/5 p-8 md:p-12 rounded-3xl border border-white/10 backdrop-blur-sm"
+    >
+      <input type="hidden" name="form-name" value="contacto" />
+      <p class="hidden">
+        <label>No completar: <input name="bot-field" /></label>
+      </p>
+          
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flex flex-col gap-2">
+        <label for="name" class="text-sm text-gray-400 font-sans">Nombre Completo</label>
+        <input type="text" id="name" name="name" placeholder="Juan Pérez"
+          class="bg-black/40 border border-white/10 text-white p-3 px-6 rounded-full focus:outline-none focus:border-accent transition-all" required />
       </div>
 
       <div class="flex flex-col gap-2">
-        <label for="reason" class="text-sm text-gray-400 font-sans">Motivo del contacto</label>
-        <div class="relative">
-            <select 
-                id="reason" 
-                name="reason" 
-                class="w-full bg-black/40 border border-white/10 text-white p-3 rounded-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all appearance-none cursor-pointer"
-            >
-                <option value="interview">Solicitud de Entrevista</option>
-                <option value="collab">Colaboración Académica</option>
-                <option value="speaking">Conferencias / Charlas</option>
-                <option value="other">Otro asunto</option>
-            </select>
-            <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-            </svg>
-        </div>
+        <label for="email" class="text-sm text-gray-400 font-sans">Correo Electrónico</label>
+        <input type="email" id="email" name="email" placeholder="juan@ejemplo.com"
+          class="bg-black/40 border border-white/10 text-white p-3 px-6 rounded-full focus:outline-none focus:border-accent transition-all" required />
       </div>
+    </div>
 
-      <div class="flex flex-col gap-2">
-        <label for="message" class="text-sm text-gray-400 font-sans">Mensaje</label>
-        <textarea 
-          id="message" 
-          name="message" 
-          rows="5" 
-          placeholder="Escriba su mensaje aquí..."
-          class="bg-black/40 border border-white/10 text-white p-3 rounded-sm focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all resize-none"
-        ></textarea>
+    <div class="flex flex-col gap-2">
+      <label for="reason" class="text-sm text-gray-400 font-sans">Motivo del contacto</label>
+      <div class="relative">
+          <select id="reason" name="reason" 
+            class="w-full bg-black/40 border border-white/10 text-white p-3 px-6 rounded-full focus:outline-none focus:border-accent transition-all appearance-none cursor-pointer">
+              <option value="interview">Solicitud de Entrevista</option>
+              <option value="collab">Colaboración Académica</option>
+              <option value="speaking">Conferencias / Charlas</option>
+              <option value="other">Otro asunto</option>
+          </select>
       </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <label for="message" class="text-sm text-gray-400 font-sans">Mensaje</label>
+      <textarea id="message" name="message" rows="5" placeholder="Escriba su mensaje aquí..."
+        class="bg-black/40 border border-white/10 text-white p-4 px-6 rounded-3xl focus:outline-none focus:border-accent transition-all resize-none"></textarea>
+    </div>
 
       <div class="flex items-center gap-3 pt-2">
         <input 
