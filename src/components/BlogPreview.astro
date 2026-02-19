@@ -1,0 +1,98 @@
+---
+// src/components/BlogPreview.astro
+
+// Datos simulados (luego los cargaremos de archivos reales)
+const posts = [
+  {
+    title: "La inflación como fenómeno moral",
+    category: "Economía",
+    date: "12 Oct, 2023",
+    excerpt: "Un análisis sobre cómo la devaluación de la moneda erosiona no solo el poder adquisitivo, sino la confianza social.",
+    image: "https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop",
+    link: "#"
+  },
+  {
+    title: "Estoicismo en tiempos de crisis financiera",
+    category: "Filosofía",
+    date: "28 Sep, 2023",
+    excerpt: "¿Qué pueden enseñarnos Marco Aurelio y Séneca sobre la gestión de la incertidumbre en los mercados modernos?",
+    image: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?q=80&w=2070&auto=format&fit=crop",
+    link: "#"
+  },
+  {
+    title: "El futuro del trabajo y la Inteligencia Artificial",
+    category: "Tecnología y Sociedad",
+    date: "15 Sep, 2023",
+    excerpt: "La redefinición del valor humano en una economía automatizada. ¿Estamos ante el fin del proletariado?",
+    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop",
+    link: "#"
+  }
+];
+---
+
+<section id="blog" class="py-24 bg-[#080a0c]"> <div class="max-w-7xl mx-auto px-6">
+    
+    <div class="flex justify-between items-end mb-12 border-b border-white/10 pb-6">
+      <div>
+        <h2 class="font-sans text-accent tracking-widest uppercase text-sm mb-2 font-semibold">
+          Pensamiento Reciente
+        </h2>
+        <h3 class="font-serif text-3xl md:text-4xl text-white">
+          Artículos y Ensayos
+        </h3>
+      </div>
+      <a href="#" class="hidden md:flex items-center gap-2 text-muted hover:text-white transition-colors text-sm font-sans">
+        Ver todo el archivo
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {posts.map((post) => (
+        <article class="group cursor-pointer">
+          
+          <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-sm">
+            <div class="absolute inset-0 bg-action/20 group-hover:bg-transparent transition-colors z-10"></div>
+            <img 
+              src={post.image} 
+              alt={post.title} 
+              class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+            />
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between text-xs font-sans">
+              <span class="text-accent uppercase tracking-wider font-bold">
+                {post.category}
+              </span>
+              <time class="text-gray-500">
+                {post.date}
+              </time>
+            </div>
+
+            <h4 class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
+              {post.title}
+            </h4>
+
+            <p class="font-sans text-sm text-gray-400 line-clamp-3 leading-relaxed">
+              {post.excerpt}
+            </p>
+
+            <a href={post.link} class="inline-block mt-2 text-sm text-white border-b border-transparent group-hover:border-action transition-all">
+              Leer artículo →
+            </a>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center md:hidden">
+      <a href="#" class="inline-block px-6 py-3 border border-white/20 text-white rounded-sm hover:bg-white/5 transition-colors">
+        Ver todo el archivo
+      </a>
+    </div>
+
+  </div>
+</section>

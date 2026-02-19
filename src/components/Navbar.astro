@@ -1,0 +1,73 @@
+---
+// src/components/Navbar.astro
+---
+
+<nav class="fixed top-0 w-full z-50 bg-deep-bg/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between relative z-50">
+    
+    <a href="#" class="text-2xl font-serif font-bold tracking-wide text-white hover:text-accent transition-colors">
+      NEXONOMIC<span class="text-accent">.</span>
+    </a>
+
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#about" class="text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider">El Proyecto</a>
+      <a href="#blog" class="text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider">Artículos</a>
+      
+      <a href="#contact" class="px-5 py-2 bg-action hover:bg-accent text-white font-sans font-semibold text-sm transition-colors duration-300 rounded-sm">
+        Contacto
+      </a>
+    </div>
+
+    <button id="menu-btn" class="md:hidden text-white focus:outline-none" aria-label="Abrir menú">
+      <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 transition-transform duration-300">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 hidden transition-transform duration-300">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+  </div>
+
+  <div id="mobile-menu" class="fixed inset-0 bg-deep-bg z-40 flex flex-col items-center justify-start pt-32 gap-8 hidden opacity-0 transition-opacity duration-300">
+    <a href="#about" class="mobile-link text-2xl font-serif text-white hover:text-accent transition-colors">El Proyecto</a>
+    <a href="#blog" class="mobile-link text-2xl font-serif text-white hover:text-accent transition-colors">Artículos</a>
+    <a href="#contact" class="mobile-link text-2xl font-serif text-accent border border-accent px-8 py-2 rounded-sm hover:bg-accent hover:text-white transition-all">Contacto</a>
+  </div>
+</nav>
+
+<script>
+  // Lógica del menú móvil
+  const menuBtn = document.getElementById('menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+  const mobileLinks = document.querySelectorAll('.mobile-link');
+
+  function toggleMenu() {
+    mobileMenu?.classList.toggle('hidden');
+    
+    // Hack para la transición de opacidad
+    if (mobileMenu?.classList.contains('hidden')) {
+        mobileMenu.classList.remove('opacity-100');
+        mobileMenu.classList.add('opacity-0');
+        document.body.style.overflow = 'auto'; 
+    } else {
+        // Pequeño timeout para permitir que el navegador renderice el "display: flex" antes de la opacidad
+        setTimeout(() => {
+            mobileMenu?.classList.remove('opacity-0');
+            mobileMenu?.classList.add('opacity-100');
+        }, 10);
+        document.body.style.overflow = 'hidden'; 
+    }
+
+    iconOpen?.classList.toggle('hidden');
+    iconClose?.classList.toggle('hidden');
+  }
+
+  menuBtn?.addEventListener('click', toggleMenu);
+
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', toggleMenu);
+  });
+</script>
