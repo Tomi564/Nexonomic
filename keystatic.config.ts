@@ -1,14 +1,18 @@
 // keystatic.config.ts
 import { config, fields, collection } from '@keystatic/core';
 
+const isDev = process.env.NODE_ENV === 'development';
+
 export default config({
-  storage: {
-    kind: 'github', // Cambiamos 'local' por 'github'
-    repo: {
-      owner: 'tomasmartinez564', // Tu usuario de GitHub
-      name: 'Nexonomic',         // El nombre exacto de tu repositorio
-    },
-  },
+  storage: isDev
+    ? { kind: 'local' }
+    : {
+        kind: 'github',
+        repo: {
+          owner: 'tomasmartinez564',
+          name: 'Nexonomic',
+        },
+      },
   collections: {
     noticias: collection({
       label: 'Noticias',
