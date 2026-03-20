@@ -26,7 +26,7 @@ const posts = noticias.map(n => ({
           Artículos y Ensayos
         </h3>
       </div>
-      <a href="#" class="hidden md:flex items-center gap-2 text-muted hover:text-white transition-colors text-sm font-sans">
+      <a href="/blog" class="hidden md:flex items-center gap-2 text-muted hover:text-white transition-colors text-sm font-sans">
         Ver todo el archivo
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -36,38 +36,40 @@ const posts = noticias.map(n => ({
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       {posts.map((post) => (
-        <article class="group cursor-pointer">
-          <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-xl"> 
+        <article class="group">
+          <a href={post.link} class="block">
+            <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-xl">
               <div class="absolute inset-0 bg-action/20 group-hover:bg-transparent transition-colors z-10"></div>
-              <img 
-                src={post.image} 
-                alt={post.title} 
+              <img
+                src={post.image}
+                alt={post.title}
                 class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
               />
             </div>
 
-          <div class="space-y-3">
-            <div class="flex items-center justify-between text-xs font-sans">
-              <span class="text-accent uppercase tracking-wider font-bold">
-                {post.category}
+            <div class="space-y-3">
+              <div class="flex items-center justify-between text-xs font-sans">
+                <span class="text-accent uppercase tracking-wider font-bold">
+                  {post.category}
+                </span>
+                <time class="text-gray-500">
+                  {post.date}
+                </time>
+              </div>
+
+              <h4 class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
+                {post.title}
+              </h4>
+
+              <p class="font-sans text-sm text-gray-400 line-clamp-3 leading-relaxed">
+                {post.excerpt}
+              </p>
+
+              <span class="inline-block mt-2 text-sm text-white border-b border-transparent group-hover:border-action transition-all">
+                Leer artículo →
               </span>
-              <time class="text-gray-500">
-                {post.date}
-              </time>
             </div>
-
-            <h4 class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
-              {post.title}
-            </h4>
-
-            <p class="font-sans text-sm text-gray-400 line-clamp-3 leading-relaxed">
-              {post.excerpt}
-            </p>
-
-            <a href={post.link} class="inline-block mt-2 text-sm text-white border-b border-transparent group-hover:border-action transition-all">
-              Leer artículo →
-            </a>
-          </div>
+          </a>
         </article>
       ))}
     </div>

@@ -6,14 +6,8 @@ import { getNoticias } from '../../utils/noticias';
 import Layout from '../../layouts/Layout.astro';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 
-export async function getStaticPaths() {
-  const noticias = await getNoticias();
-  return noticias.map(n => ({ params: { slug: n.slug } }));
-}
-
 const { slug } = Astro.params;
 
-// Use glob-based reader for metadata
 const noticias = await getNoticias();
 const noticia = noticias.find(n => n.slug === slug);
 
@@ -21,7 +15,6 @@ if (!noticia) {
   return Astro.redirect('/404');
 }
 
-// Use Keystatic reader only for the document content rendering
 const reader = createReader(process.cwd(), keystaticConfig);
 const post = await reader.collections.noticias.read(slug);
 
