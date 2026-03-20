@@ -137,19 +137,30 @@
     errorMsg?.classList.add('hidden');
 
     try {
+      const formData = new FormData(form);
+
+      // Enviar a Netlify Forms
       const res = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString(),
+        body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
       });
 
-      if (res.ok) {
-        form.reset();
-        successMsg?.classList.remove('hidden');
-        submitBtn.classList.add('hidden');
-      } else {
-        throw new Error();
+      if (!res.ok) throw new Error();
+
+      // Si marcó newsletter, suscribir a Kit
+      if (newsletterInput?.checked) {
+        const email = formData.get('email') as string;
+        await fetch('https://app.kit.com/forms/9228149/subscriptions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ email_address: email }).toString(),
+        });
       }
+
+      form.reset();
+      successMsg?.classList.remove('hidden');
+      submitBtn.classList.add('hidden');
     } catch {
       errorMsg?.classList.remove('hidden');
       submitBtn.disabled = false;
