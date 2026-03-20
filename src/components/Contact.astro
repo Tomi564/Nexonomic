@@ -67,17 +67,24 @@
         class="bg-black/40 border border-white/10 text-white p-4 px-6 rounded-3xl focus:outline-none focus:border-accent transition-all resize-none"></textarea>
     </div>
 
-      <div class="flex items-center gap-3 pt-2">
-        <input 
-          type="checkbox" 
-          id="newsletter" 
-          name="newsletter"
-          class="w-5 h-5 border-white/20 rounded bg-black/40 text-accent focus:ring-accent focus:ring-offset-0 cursor-pointer" 
-        />
-        <label for="newsletter" class="text-sm text-gray-400 cursor-pointer select-none">
+      <label for="newsletter" class="flex items-center gap-3 pt-2 cursor-pointer group">
+        <div class="relative flex-shrink-0 w-5 h-5">
+          <input
+            type="checkbox"
+            id="newsletter"
+            name="newsletter"
+            class="peer sr-only"
+          />
+          <div class="checkbox-box w-5 h-5 rounded border border-white/20 bg-black/40 peer-checked:bg-accent peer-checked:border-accent transition-all flex items-center justify-center">
+            <svg class="checkbox-check w-3 h-3 text-deep-bg transition-transform pointer-events-none" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+          </div>
+        </div>
+        <span class="text-sm text-gray-400 select-none group-hover:text-gray-300 transition-colors">
           Deseo recibir actualizaciones mensuales sobre nuevos artículos.
-        </label>
-      </div>
+        </span>
+      </label>
 
       <div class="pt-4">
         <button
@@ -102,7 +109,19 @@
   </div>
 </section>
 
+<style>
+  .checkbox-check { transform: scale(0); transition: transform 0.15s ease; }
+  .checkbox-checked .checkbox-check { transform: scale(1); }
+  .checkbox-checked { background-color: #3cc2a2 !important; border-color: #3cc2a2 !important; }
+</style>
+
 <script>
+  const newsletterInput = document.getElementById('newsletter') as HTMLInputElement | null;
+  const checkboxBox = document.querySelector('.checkbox-box') as HTMLElement | null;
+  newsletterInput?.addEventListener('change', () => {
+    checkboxBox?.classList.toggle('checkbox-checked', newsletterInput.checked);
+  });
+
   const form = document.querySelector('form[name="contacto"]') as HTMLFormElement | null;
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
   const successMsg = document.getElementById('form-success');

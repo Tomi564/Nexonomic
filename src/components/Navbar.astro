@@ -11,8 +11,8 @@
     </a>
 
     <div class="hidden md:flex items-center gap-8">
-      <a href="#about" class="text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">El Proyecto</a>
-      <a href="#blog" class="text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">Artículos</a>
+      <a href="#about" data-nav="about" class="nav-link text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">El Proyecto</a>
+      <a href="#blog" data-nav="blog" class="nav-link text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">Artículos</a>
       <a href="#contact" class="px-8 py-3 bg-action hover:bg-accent text-white font-sans font-bold text-sm transition-all duration-300 rounded-full">
         Contacto
       </a>
@@ -35,9 +35,9 @@
     style="max-height: 0; background-color: #050708; border-top: 1px solid rgba(255,255,255,0.08);"
   >
     <div class="flex flex-col items-center gap-8 py-10">
-      <a href="#about" class="mobile-link text-xl font-serif text-white hover:text-accent transition-colors tracking-wide">El Proyecto</a>
-      <a href="#blog" class="mobile-link text-xl font-serif text-white hover:text-accent transition-colors tracking-wide">Artículos</a>
-      <a href="#contact" class="mobile-link text-lg font-serif text-accent border border-accent px-10 py-3 rounded-full hover:bg-accent hover:text-deep-bg transition-all duration-300">Contacto</a>
+      <a href="#about" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">El Proyecto</a>
+      <a href="#blog" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">Artículos</a>
+      <a href="#contact" class="mobile-link px-10 py-3 bg-action hover:bg-accent text-white font-sans font-bold rounded-full transition-all duration-300">Contacto</a>
     </div>
   </div>
 </nav>
@@ -87,4 +87,26 @@
   menuBtn?.addEventListener('click', toggleMenu);
   menuOverlay?.addEventListener('click', closeMenu);
   mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+
+  // Active nav link via IntersectionObserver
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link[data-nav]');
+  const sections = ['about', 'blog', 'contact'];
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          const isActive = link.dataset.nav === id;
+          link.classList.toggle('text-white', isActive);
+          link.classList.toggle('text-gray-300', !isActive);
+        });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
 </script>
