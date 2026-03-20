@@ -1,20 +1,15 @@
 ---
 // src/components/BlogPreview.astro
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../keystatic.config.ts';
+import { getNoticias } from '../utils/noticias';
 
-const reader = createReader(process.cwd(), keystaticConfig);
+const noticias = await getNoticias();
 
-// Traemos las noticias reales desde Keystatic
-const noticias = await reader.collections.noticias.all();
-
-// Mapeamos los datos para que el HTML los entienda
 const posts = noticias.map(n => ({
-  title: n.entry.title,
-  category: n.entry.category,
-  date: n.entry.date,
-  excerpt: n.entry.excerpt,
-  image: n.entry.image || 'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
+  title: n.data.title,
+  category: n.data.category,
+  date: n.data.date,
+  excerpt: n.data.excerpt,
+  image: n.data.image || 'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
   link: `/blog/${n.slug}`
 }));
 ---

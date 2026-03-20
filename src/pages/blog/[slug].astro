@@ -2,59 +2,63 @@
 // src/pages/blog/[slug].astro
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
+import { getNoticias } from '../../utils/noticias';
 import Layout from '../../layouts/Layout.astro';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 
-// 1. Generar las rutas para cada noticia
 export async function getStaticPaths() {
-  const reader = createReader(process.cwd(), keystaticConfig);
-  const noticias = await reader.collections.noticias.list();
-  
-  return noticias.map(slug => ({
-    params: { slug },
-  }));
+  const noticias = await getNoticias();
+  return noticias.map(n => ({ params: { slug: n.slug } }));
 }
 
-// 2. Obtener los datos de la noticia según el slug
 const { slug } = Astro.params;
-const reader = createReader(process.cwd(), keystaticConfig);
-const post = await reader.collections.noticias.read(slug);
 
-if (!post) {
+// Use glob-based reader for metadata
+const noticias = await getNoticias();
+const noticia = noticias.find(n => n.slug === slug);
+
+if (!noticia) {
   return Astro.redirect('/404');
 }
 
-const { title, date, image, content } = post;
+// Use Keystatic reader only for the document content rendering
+const reader = createReader(process.cwd(), keystaticConfig);
+const post = await reader.collections.noticias.read(slug);
+
+const { title, date, image, category } = noticia.data;
 ---
 
 <Layout title={`${title} | Nexonomic`}>
   <article class="pt-32 pb-24 bg-[#080a0c] min-h-screen">
     <div class="max-w-3xl mx-auto px-6">
-      
+
       <header class="mb-12">
         <div class="flex items-center gap-4 text-accent uppercase tracking-widest text-xs font-bold mb-4">
-          <span>{post.category}</span>
+          <span>{category}</span>
           <span class="text-gray-600">•</span>
           <time class="text-gray-500">{date}</time>
         </div>
         <h1 class="font-serif text-4xl md:text-5xl text-white leading-tight mb-8">
           {title}
         </h1>
-        
+
         {image && (
           <div class="aspect-[16/9] overflow-hidden rounded-sm bg-gray-800">
-            <img 
-              src={image} 
-              alt={title} 
+            <img
+              src={image}
+              alt={title}
               class="w-full h-full object-cover"
             />
           </div>
         )}
       </header>
 
-            <div class="prose prose-invert prose-accent prose-headings:font-serif prose-p:font-sans max-w-none">
-            <DocumentRenderer document={await content()} />
-            </div>
+      <div class="prose prose-invert prose-accent prose-headings:font-serif prose-p:font-sans max-w-none">
+        {post
+          ? <DocumentRenderer document={await post.content()} />
+          : <div set:html={noticia.body.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')} />
+        }
+      </div>
 
       <footer class="mt-16 pt-8 border-t border-white/10">
         <a href="/" class="text-accent hover:text-white transition-colors flex items-center gap-2 font-sans text-sm">
@@ -66,7 +70,6 @@ const { title, date, image, content } = post;
 </Layout>
 
 <style is:global>
-  /* Estilos rápidos para el contenido de Keystatic */
   .prose h2 { @apply font-serif text-2xl text-white mt-12 mb-4; }
   .prose p { @apply mb-6 text-lg text-gray-400; }
   .prose strong { @apply text-white font-bold; }
