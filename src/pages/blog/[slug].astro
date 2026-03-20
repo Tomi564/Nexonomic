@@ -2,7 +2,7 @@
 // src/pages/blog/[slug].astro
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
-import { getNoticias } from '../../utils/noticias';
+import { getNoticias, formatDate } from '../../utils/noticias';
 import Layout from '../../layouts/Layout.astro';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 
@@ -22,10 +22,12 @@ const next = index < noticias.length - 1 ? noticias[index + 1] : null;
 const reader = createReader(process.cwd(), keystaticConfig);
 const post = await reader.collections.noticias.read(slug);
 
-const { title, date, image, category } = noticia.data;
+const { title, image, category } = noticia.data;
+const date = formatDate(noticia.data.date);
+const excerpt = noticia.data.excerpt ?? '';
 ---
 
-<Layout title={`${title} | Nexonomic`}>
+<Layout title={`${title} | Nexonomic`} description={excerpt} ogImage={image}>
   <article class="pt-32 pb-24 bg-[#080a0c] min-h-screen">
     <div class="max-w-3xl mx-auto px-6">
 

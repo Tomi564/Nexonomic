@@ -2,14 +2,19 @@
 // 1. SIEMPRE debe empezar con los tres guiones
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
 	title: string;
+	description?: string;
+	ogImage?: string;
 }
 
-const { title } = Astro.props;
-const description = "Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.";
-const ogImage = "/Nexonomic_Logo_K-03.jpg";
+const {
+	title,
+	description = "Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.",
+	ogImage = "/Nexonomic_Logo_K-03.jpg",
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -32,6 +37,7 @@ const ogImage = "/Nexonomic_Logo_K-03.jpg";
 		<meta name="twitter:description" content={description} />
 		<meta name="twitter:image" content={ogImage} />
 
+		<ViewTransitions />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">

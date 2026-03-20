@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getNoticias } from '../../utils/noticias';
+import { getNoticias, formatDate } from '../../utils/noticias';
 
 const noticias = await getNoticias();
 
@@ -8,7 +8,7 @@ const posts = noticias
   .map(n => ({
     title: n.data.title,
     category: n.data.category,
-    date: n.data.date,
+    date: formatDate(n.data.date),
     excerpt: n.data.excerpt,
     image: n.data.image || 'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
     link: `/blog/${n.slug}`,
