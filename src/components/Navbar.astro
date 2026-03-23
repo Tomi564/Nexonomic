@@ -3,7 +3,7 @@
 ---
 
 <nav class="fixed top-0 w-full z-[100] bg-deep-bg/95 backdrop-blur-md border-b border-white/10 transition-all duration-300">
-  <div class="max-w-full mx-auto px-4 h-24 flex items-center justify-between relative">
+  <div class="max-w-full mx-auto px-4 h-16 md:h-24 flex items-center justify-between relative">
 
     <a href="/" class="flex items-center transition-transform hover:scale-105 relative">
       <img src="/assets/img/Nexonomic_Logo_K_07.jpg" class="hidden md:block h-20 w-auto object-contain mix-blend-screen" alt="Logo Web" />
@@ -11,8 +11,8 @@
     </a>
 
     <div class="hidden md:flex items-center gap-8">
-      <a href="#about" data-nav="about" class="nav-link text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">El Proyecto</a>
-      <a href="#blog" data-nav="blog" class="nav-link text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold">Artículos</a>
+      <a href="#about" data-nav="about" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">El Proyecto</a>
+      <a href="#blog" data-nav="blog" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">Artículos</a>
       <a href="#contact" class="px-8 py-3 bg-action hover:bg-accent text-white font-sans font-bold text-sm transition-all duration-300 rounded-full">
         Contacto
       </a>
@@ -48,6 +48,22 @@
 <style>
   .mix-blend-screen {
     mix-blend-mode: screen;
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #3cc2a2;
+    transition: width 0s;
+  }
+
+  .nav-link.active::after {
+    width: 100%;
+    transition: width 0.4s ease-out;
   }
 </style>
 
@@ -98,6 +114,7 @@
         const id = entry.target.id;
         navLinks.forEach(link => {
           const isActive = link.dataset.nav === id;
+          link.classList.toggle('active', isActive);
           link.classList.toggle('text-white', isActive);
           link.classList.toggle('text-gray-300', !isActive);
         });

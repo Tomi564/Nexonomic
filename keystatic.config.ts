@@ -49,6 +49,16 @@ export default config({
         }),
       },
     }),
+    citas: collection({
+      label: 'Citas',
+      slugField: 'author',
+      path: 'src/content/citas/*',
+      schema: {
+        author: fields.slug({ name: { label: 'Autor' } }),
+        role: fields.text({ label: 'Cargo / Descripción' }),
+        text: fields.text({ label: 'Cita', multiline: true }),
+      },
+    }),
     documentos: collection({
       label: 'Documentos',
       slugField: 'title',

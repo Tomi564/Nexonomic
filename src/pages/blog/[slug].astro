@@ -28,8 +28,17 @@ const excerpt = noticia.data.excerpt ?? '';
 ---
 
 <Layout title={`${title} | Nexonomic`} description={excerpt} ogImage={image}>
-  <article class="pt-32 pb-24 bg-[#080a0c] min-h-screen">
+  <article class="pt-24 md:pt-32 pb-16 md:pb-24 bg-[#080a0c] min-h-screen">
     <div class="max-w-3xl mx-auto px-6">
+
+      <div class="mb-8">
+        <a href="/blog" class="inline-flex items-center gap-2 text-gray-500 hover:text-accent transition-colors font-sans text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Todos los artículos
+        </a>
+      </div>
 
       <header class="mb-12">
         <div class="flex items-center gap-4 text-accent uppercase tracking-widest text-xs font-bold mb-4">
@@ -59,24 +68,24 @@ const excerpt = noticia.data.excerpt ?? '';
         }
       </div>
 
-      <footer class="mt-16 pt-8 border-t border-white/10">
-        <div class="flex items-center justify-between gap-4">
-          <div class="flex-1">
+      <footer class="mt-12 md:mt-16 pt-8 border-t border-white/10">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div>
             {prev && (
-              <a href={`/blog/${prev.slug}`} class="group flex flex-col gap-1 text-left">
+              <a href={`/blog/${prev.slug}`} class="group flex flex-col gap-1">
                 <span class="text-xs text-gray-500 font-sans uppercase tracking-widest">← Anterior</span>
-                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-1">{prev.data.title}</span>
+                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-2 sm:line-clamp-1">{prev.data.title}</span>
               </a>
             )}
           </div>
-          <a href="/blog" class="text-gray-500 hover:text-accent transition-colors font-sans text-xs uppercase tracking-widest flex-shrink-0">
+          <a href="/blog" class="text-gray-500 hover:text-accent transition-colors font-sans text-xs uppercase tracking-widest flex-shrink-0 order-first sm:order-none">
             Archivo
           </a>
-          <div class="flex-1 text-right">
+          <div class="sm:text-right">
             {next && (
-              <a href={`/blog/${next.slug}`} class="group flex flex-col gap-1 text-right">
+              <a href={`/blog/${next.slug}`} class="group flex flex-col gap-1 sm:items-end">
                 <span class="text-xs text-gray-500 font-sans uppercase tracking-widest">Siguiente →</span>
-                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-1">{next.data.title}</span>
+                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-2 sm:line-clamp-1">{next.data.title}</span>
               </a>
             )}
           </div>

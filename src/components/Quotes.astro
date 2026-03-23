@@ -1,22 +1,43 @@
 ---
 // src/components/Quotes.astro
-const quotes = [
-  {
-    text: "La economía no trata de cosas, sino de relaciones entre personas y, en última instancia, entre clases.",
-    author: "Karl Marx",
-    role: "Filósofo y Economista"
-  },
-  {
-    text: "El precio es lo que pagas. El valor es lo que obtienes.",
-    author: "Warren Buffett",
-    role: "Inversor"
-  },
-  {
-    text: "La libertad sin oportunidades es un regalo endiablado y negarse a dar esas oportunidades es criminal.",
-    author: "Noam Chomsky",
-    role: "Lingüista y Filósofo"
+const files = import.meta.glob('../content/citas/*.yaml', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+
+function parseYaml(raw: string): Record<string, string> {
+  const lines = raw.split('\n');
+  const result: Record<string, string> = {};
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const colonIdx = line.indexOf(':');
+    if (colonIdx === -1) { i++; continue; }
+    const key = line.slice(0, colonIdx).trim();
+    const rest = line.slice(colonIdx + 1).trim();
+    if (rest === '>-' || rest === '>' || rest === '|' || rest === '|-') {
+      // bloque multilinea YAML
+      let value = '';
+      i++;
+      while (i < lines.length && (lines[i].startsWith('  ') || lines[i] === '')) {
+        const chunk = lines[i].trim();
+        if (chunk) value += (value ? ' ' : '') + chunk;
+        i++;
+      }
+      result[key] = value.replace(/!$/, '');
+    } else {
+      result[key] = rest.replace(/!$/, '');
+      i++;
+    }
   }
-];
+  return result;
+}
+
+const quotes = Object.values(files).map((raw: string) => {
+  const data = parseYaml(raw);
+  return {
+    author: data.author ?? '',
+    role: data.role ?? '',
+    text: data.text ?? '',
+  };
+}).filter(q => q.text).slice(0, 3);
 ---
 
 <section class="py-24 bg-deep-bg relative overflow-hidden">
@@ -27,14 +48,13 @@ const quotes = [
       <h2 class="font-sans text-accent tracking-widest uppercase text-xs mb-2 font-bold">Pensamiento</h2>
       <h3 class="font-serif text-3xl md:text-4xl text-white">Voces que inspiran</h3>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
-      
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-12">
+
       {quotes.map((quote) => (
-        /* Cambiamos el borde lateral recto por una tarjeta con bordes muy redondeados (rounded-3xl) según el estilo de la marca */
         <div class="group relative p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-accent/50 transition-all duration-500 hover:-translate-y-2 shadow-2xl shadow-black/20">
-          
-          <span class="absolute -top-4 left-6 text-6xl text-accent/20 font-serif group-hover:text-accent/40 transition-colors">“</span>
-          
+
+          <span class="absolute -top-4 left-6 text-6xl text-accent/20 font-serif group-hover:text-accent/40 transition-colors">"</span>
+
           <blockquote class="relative z-10">
             <p class="font-serif text-xl text-gray-200 italic leading-relaxed mb-6 group-hover:text-white transition-colors">
               "{quote.text}"

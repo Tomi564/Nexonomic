@@ -5,6 +5,7 @@ import { getNoticias, formatDate } from '../../utils/noticias';
 const noticias = await getNoticias();
 
 const posts = noticias
+  .sort((a, b) => (b.data.date ?? '').localeCompare(a.data.date ?? ''))
   .map(n => ({
     title: n.data.title,
     category: n.data.category,
@@ -12,19 +13,18 @@ const posts = noticias
     excerpt: n.data.excerpt,
     image: n.data.image || 'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
     link: `/blog/${n.slug}`,
-  }))
-  .sort((a, b) => (a.date && b.date ? b.date.localeCompare(a.date) : 0));
+  }));
 ---
 
 <Layout title="Artículos | Nexonomic">
-  <header class="pt-40 pb-16 bg-deep-bg border-b border-white/10">
+  <header class="pt-28 md:pt-40 pb-12 md:pb-16 bg-deep-bg border-b border-white/10">
     <div class="max-w-7xl mx-auto px-6">
       <p class="font-sans text-accent tracking-widest uppercase text-xs mb-4 font-bold">Archivo</p>
       <h1 class="font-serif text-4xl md:text-5xl text-white">Artículos y Ensayos</h1>
     </div>
   </header>
 
-  <main class="bg-deep-bg min-h-screen py-20">
+  <main class="bg-deep-bg min-h-screen py-12 md:py-20">
     <div class="max-w-7xl mx-auto px-6">
 
       {posts.length === 0 ? (
