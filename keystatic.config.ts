@@ -9,7 +9,7 @@ export default config({
     : {
         kind: 'github',
         repo: {
-          owner: 'tomasmartinez564',
+          owner: 'Tomi564',
           name: 'Nexonomic',
         },
       },
