@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <!-- Formulario estático para detección de Netlify Forms (SSR workaround) -->
+    <form name="contacto" netlify netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contacto" />
+      <input name="bot-field" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <select name="reason">
+        <option value="interview">Solicitud de Entrevista</option>
+        <option value="collab">Colaboración Académica</option>
+        <option value="speaking">Conferencias / Charlas</option>
+        <option value="other">Otro asunto</option>
+      </select>
+      <textarea name="message"></textarea>
+      <input type="checkbox" name="newsletter" />
+      <button type="submit">Enviar</button>
+    </form>
+  </body>
+</html>
