@@ -148,13 +148,13 @@
 
       if (!res.ok) throw new Error();
 
-      // Si marcó newsletter, suscribir a Kit
+      // Si marcó newsletter, suscribir a Kit via endpoint server-side
       if (newsletterInput?.checked) {
         const email = formData.get('email') as string;
-        await fetch('https://app.kit.com/forms/9228149/subscriptions', {
+        await fetch('/api/subscribe', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams({ email_address: email }).toString(),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
         });
       }
 
