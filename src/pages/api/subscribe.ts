@@ -9,10 +9,11 @@ export const POST: APIRoute = async ({ request }) => {
       return new Response(JSON.stringify({ error: 'Email requerido' }), { status: 400 });
     }
 
-    const res = await fetch('https://app.kit.com/forms/9228149/subscriptions', {
+    const apiKey = import.meta.env.KIT_API_KEY;
+    const res = await fetch('https://api.convertkit.com/v3/forms/9228149/subscribe', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({ email_address: email }).toString(),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ api_key: apiKey, email }),
     });
 
     if (!res.ok) {
