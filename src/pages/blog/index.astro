@@ -34,12 +34,12 @@ const posts = noticias
           {posts.map((post) => (
             <article class="group">
               <a href={post.link} class="block">
-                <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-xl">
-                  <div class="absolute inset-0 bg-action/20 group-hover:bg-transparent transition-colors z-10"></div>
+                <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-2xl">
+                  <div class="absolute inset-0 bg-action/30 group-hover:bg-action/10 transition-colors z-10"></div>
                   <img
                     src={post.image}
                     alt={post.title}
-                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
+                    class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out saturate-75 brightness-90"
                   />
                 </div>
                 <div class="space-y-3">
