@@ -139,8 +139,8 @@
     try {
       const formData = new FormData(form);
 
-      // Enviar a Netlify Forms
-      const res = await fetch('/', {
+      // Enviar a Netlify Forms (POST al archivo estático para evitar intercepción SSR)
+      const res = await fetch('/netlify-forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formData as unknown as Record<string, string>).toString(),
