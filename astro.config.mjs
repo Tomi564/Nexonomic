@@ -7,7 +7,7 @@ import keystatic from '@keystatic/astro';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
-  site: 'https://nexonomic.netlify.app',
+  site: 'https://nexonomic.com',
   output: 'server',
   adapter: netlify(),
   integrations: [
