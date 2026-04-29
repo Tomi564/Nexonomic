@@ -1,13 +1,15 @@
 import rss from '@astrojs/rss';
+import type { APIRoute } from 'astro';
 import { getNoticias } from '../utils/noticias';
 
-export async function GET() {
+export const GET: APIRoute = async ({ site }) => {
   const noticias = await getNoticias();
+  const siteUrl = site?.href ?? 'https://nexonomic.com';
 
   return rss({
     title: 'Nexonomic — Economía y Filosofía',
     description: 'Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.',
-    site: 'https://nexonomic.netlify.app',
+    site: siteUrl,
     items: noticias.map(n => ({
       title: n.data.title ?? '',
       description: n.data.excerpt ?? '',
@@ -15,4 +17,5 @@ export async function GET() {
       link: `/blog/${n.slug}`,
     })),
   });
-}
+};
+

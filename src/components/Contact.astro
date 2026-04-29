@@ -101,6 +101,10 @@
         <p class="text-gray-400 font-sans text-base leading-relaxed">Tu mensaje fue recibido. Voy a leerlo con atención y te responderé a la brevedad.</p>
       </div>
 
+      <div id="form-newsletter-warn" class="hidden mt-6 p-4 rounded-2xl border border-amber-500/35 bg-amber-950/30 text-amber-100/95 text-sm font-sans text-left leading-relaxed">
+        Tu mensaje se envió correctamente. No pudimos completar la suscripción al newsletter en este momento; podés intentar de nuevo en otro envío o contactarnos si el problema persiste.
+      </div>
+
       <div id="form-error" class="hidden text-center py-4">
         <p class="text-red-400 font-sans font-semibold text-sm">Ocurrió un error al enviar. Por favor intentá de nuevo.</p>
       </div>
@@ -125,6 +129,7 @@
   const form = document.querySelector('form[name="contacto"]') as HTMLFormElement | null;
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
   const successMsg = document.getElementById('form-success');
+  const newsletterWarn = document.getElementById('form-newsletter-warn');
   const errorMsg = document.getElementById('form-error');
 
   form?.addEventListener('submit', async (e) => {
@@ -134,12 +139,12 @@
     submitBtn.disabled = true;
     submitBtn.textContent = 'Enviando...';
     successMsg?.classList.add('hidden');
+    newsletterWarn?.classList.add('hidden');
     errorMsg?.classList.add('hidden');
 
     try {
       const formData = new FormData(form);
 
-      // Enviar a Netlify Forms (POST al archivo estático para evitar intercepción SSR)
       const res = await fetch('/netlify-forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -148,18 +153,27 @@
 
       if (!res.ok) throw new Error();
 
-      // Si marcó newsletter, suscribir a Kit via endpoint server-side
+      let subscribedOk = true;
       if (newsletterInput?.checked) {
         const email = formData.get('email') as string;
-        await fetch('/api/subscribe', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
+        try {
+          const subRes = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email }),
+          });
+          subscribedOk = subRes.ok;
+        } catch {
+          subscribedOk = false;
+        }
       }
 
       form.reset();
+      checkboxBox?.classList.remove('checkbox-checked');
+      if (newsletterInput) newsletterInput.checked = false;
+
       successMsg?.classList.remove('hidden');
+      if (!subscribedOk && newsletterWarn) newsletterWarn.classList.remove('hidden');
       submitBtn.classList.add('hidden');
     } catch {
       errorMsg?.classList.remove('hidden');

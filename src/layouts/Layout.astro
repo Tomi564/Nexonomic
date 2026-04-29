@@ -1,5 +1,6 @@
 ---
 // 1. SIEMPRE debe empezar con los tres guiones
+import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import { ViewTransitions } from 'astro:transitions';
@@ -15,6 +16,17 @@ const {
 	description = "Un espacio de reflexión crítica donde la teoría económica se encuentra con los fundamentos filosóficos de nuestra sociedad.",
 	ogImage = "/Nexonomic_Logo_K-03.jpg",
 } = Astro.props;
+
+const siteBase = Astro.site ?? new URL('https://nexonomic.com');
+/** og:image debe ser URL absoluta en redes sociales */
+function ogAbsolute(raw: string): string {
+	if (raw.startsWith('http://') || raw.startsWith('https://')) return raw;
+	const path = raw.startsWith('/') ? raw : `/${raw}`;
+	return new URL(path, siteBase.origin).href;
+}
+
+const canonicalHref = new URL(Astro.url.pathname, siteBase.origin).href;
+const ogImageHref = ogAbsolute(ogImage);
 ---
 
 <!doctype html>
@@ -26,16 +38,18 @@ const {
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="canonical" href={canonicalHref} />
 
 		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalHref} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={ogImage} />
+		<meta property="og:image" content={ogImageHref} />
 
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content={title} />
 		<meta name="twitter:description" content={description} />
-		<meta name="twitter:image" content={ogImage} />
+		<meta name="twitter:image" content={ogImageHref} />
 
 		<ViewTransitions />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
