@@ -112,12 +112,12 @@
   menuOverlay?.addEventListener('click', closeMenu);
   mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-  // Scrollspy: el bloque con mayor intersección gana (mejor para secciones bajas como #radio)
-  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link[data-nav]');
+  /** Scrollspy estable: la sección activa es la última cuyo borde superior ya pasó una línea bajo el header (sin IntersectionObserver que parpadea). */
+  const navLinks = document.querySelectorAll('.nav-link[data-nav]');
   const sections = ['about', 'blog', 'citas', 'radio', 'contact'];
 
   function updateActiveNav(activeId) {
-    navLinks.forEach(link => {
+    navLinks.forEach((link) => {
       const isActive = link.dataset.nav === activeId;
       link.classList.toggle('active', isActive);
       link.classList.toggle('text-white', isActive);
@@ -125,19 +125,36 @@
     });
   }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      const intersecting = entries.filter(e => e.isIntersecting);
-      if (intersecting.length === 0) return;
-      intersecting.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-      const id = intersecting[0].target.id;
-      if (sections.includes(id)) updateActiveNav(id);
-    },
-    { threshold: [0, 0.08, 0.15, 0.25, 0.35, 0.5, 0.65, 0.8, 1], rootMargin: '-12% 0px -12% 0px' },
-  );
+  function navMarkerY() {
+    const navEl = document.querySelector('nav');
+    const h = navEl instanceof HTMLElement ? navEl.getBoundingClientRect().height : 80;
+    return h + 24;
+  }
 
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
+  function getActiveSection() {
+    const marker = navMarkerY();
+    let active = sections[0];
+    for (const id of sections) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      const top = el.getBoundingClientRect().top;
+      if (top <= marker) active = id;
+    }
+    return active;
+  }
+
+  let scrollSpyTicking = false;
+  function onScrollSpy() {
+    if (scrollSpyTicking) return;
+    scrollSpyTicking = true;
+    requestAnimationFrame(() => {
+      updateActiveNav(getActiveSection());
+      scrollSpyTicking = false;
+    });
+  }
+
+  window.addEventListener('scroll', onScrollSpy, { passive: true });
+  window.addEventListener('resize', onScrollSpy);
+  document.addEventListener('astro:page-load', onScrollSpy);
+  onScrollSpy();
 </script>
