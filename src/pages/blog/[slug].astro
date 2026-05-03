@@ -2,7 +2,7 @@
 // src/pages/blog/[slug].astro
 import { createReader } from '@keystatic/core/reader';
 import keystaticConfig from '../../../keystatic.config';
-import { getNoticias, formatDate } from '../../utils/noticias';
+import { getNoticias, formatDate, normalizePublicUrl } from '../../utils/noticias';
 import Layout from '../../layouts/Layout.astro';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 
@@ -22,7 +22,8 @@ const next = index < noticias.length - 1 ? noticias[index + 1] : null;
 const reader = createReader(process.cwd(), keystaticConfig);
 const post = await reader.collections.noticias.read(slug);
 
-const { title, image, category } = noticia.data;
+const { title, category } = noticia.data;
+const image = normalizePublicUrl(noticia.data.image);
 const date = formatDate(noticia.data.date);
 const excerpt = noticia.data.excerpt ?? '';
 ---
@@ -50,15 +51,17 @@ const excerpt = noticia.data.excerpt ?? '';
           {title}
         </h1>
 
-        {image && (
+        {image ? (
           <div class="aspect-[16/9] overflow-hidden rounded-sm bg-gray-800">
             <img
               src={image}
               alt={title}
               class="w-full h-full object-cover"
+              loading="eager"
+              decoding="async"
             />
           </div>
-        )}
+        ) : null}
       </header>
 
       <div class="prose prose-invert prose-accent prose-headings:font-serif prose-p:font-sans max-w-none">
