@@ -11,9 +11,10 @@
     </a>
 
     <div class="hidden md:flex items-center gap-8">
-      <a href="#about" data-nav="about" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">El Proyecto</a>
-      <a href="#blog" data-nav="blog" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">Artículos</a>
-      <a href="#contact" class="px-8 py-3 bg-action hover:bg-accent text-white font-sans font-bold text-sm transition-all duration-300 rounded-full">
+      <a href="/#about" data-nav="about" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">El Proyecto</a>
+      <a href="/#radio" data-nav="radio" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">Radio</a>
+      <a href="/#blog" data-nav="blog" class="nav-link relative text-sm font-sans text-gray-300 hover:text-white transition-colors uppercase tracking-wider font-bold pb-1">Artículos</a>
+      <a href="/#contact" class="px-8 py-3 bg-action hover:bg-accent text-white font-sans font-bold text-sm transition-all duration-300 rounded-full">
         Contacto
       </a>
     </div>
@@ -35,9 +36,10 @@
     style="max-height: 0; background-color: #050708; border-top: 1px solid rgba(255,255,255,0.08);"
   >
     <div class="flex flex-col items-center gap-8 py-10">
-      <a href="#about" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">El Proyecto</a>
-      <a href="#blog" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">Artículos</a>
-      <a href="#contact" class="mobile-link px-10 py-3 bg-action hover:bg-accent text-white font-sans font-bold rounded-full transition-all duration-300">Contacto</a>
+      <a href="/#about" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">El Proyecto</a>
+      <a href="/#radio" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">Radio</a>
+      <a href="/#blog" class="mobile-link text-xl font-sans font-bold text-white hover:text-accent transition-colors tracking-wide uppercase">Artículos</a>
+      <a href="/#contact" class="mobile-link px-10 py-3 bg-action hover:bg-accent text-white font-sans font-bold rounded-full transition-all duration-300">Contacto</a>
     </div>
   </div>
 </nav>
@@ -106,7 +108,7 @@
 
   // Active nav link via IntersectionObserver
   const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link[data-nav]');
-  const sections = ['about', 'blog', 'contact'];
+  const sections = ['about', 'radio', 'blog', 'contact'];
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
