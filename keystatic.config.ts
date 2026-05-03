@@ -23,6 +23,10 @@ export default config({
         title: fields.slug({ name: { label: 'Título' } }),
         date: fields.date({ label: 'Fecha de publicación' }),
         excerpt: fields.text({ label: 'Resumen', multiline: true }),
+        author: fields.text({
+          label: 'Autor',
+          description: 'Nombre del autor o equipo (opcional). Aparece junto a fecha y categoría.',
+        }),
         category: fields.select({
           label: 'Categoría',
           options: [

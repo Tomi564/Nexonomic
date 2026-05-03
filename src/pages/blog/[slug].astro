@@ -6,6 +6,20 @@ import { getNoticias, formatDate, normalizePublicUrl } from '../../utils/noticia
 import Layout from '../../layouts/Layout.astro';
 import { DocumentRenderer } from '@keystatic/core/renderer';
 
+/** Fallback si no hay reader: escapa HTML, negritas, enlaces [texto](url) y saltos de línea */
+function simpleArticleBodyToHtml(raw: string): string {
+  const esc = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  let t = esc(raw);
+  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  t = t.replace(
+    /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
+  );
+  t = t.replace(/\n/g, '<br />');
+  return t;
+}
+
 const { slug } = Astro.params;
 
 const noticias = await getNoticias();
@@ -23,6 +37,7 @@ const reader = createReader(process.cwd(), keystaticConfig);
 const post = await reader.collections.noticias.read(slug);
 
 const { title, category } = noticia.data;
+const author = (noticia.data.author ?? '').trim();
 const image = normalizePublicUrl(noticia.data.image);
 const date = formatDate(noticia.data.date);
 const excerpt = noticia.data.excerpt ?? '';
@@ -42,10 +57,16 @@ const excerpt = noticia.data.excerpt ?? '';
       </div>
 
       <header class="mb-12">
-        <div class="flex items-center gap-4 text-accent uppercase tracking-widest text-xs font-bold mb-4">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-accent uppercase tracking-widest text-xs font-bold mb-4">
           <span>{category}</span>
-          <span class="text-gray-600">•</span>
-          <time class="text-gray-500">{date}</time>
+          <span class="text-gray-600" aria-hidden="true">•</span>
+          <time class="text-gray-500 normal-case tracking-normal font-sans font-semibold">{date}</time>
+          {author ? (
+            <>
+              <span class="text-gray-600" aria-hidden="true">•</span>
+              <span class="text-gray-400 normal-case tracking-normal font-sans font-medium">{author}</span>
+            </>
+          ) : null}
         </div>
         <h1 class="font-serif text-4xl md:text-5xl text-white leading-tight mb-8">
           {title}
@@ -64,10 +85,10 @@ const excerpt = noticia.data.excerpt ?? '';
         ) : null}
       </header>
 
-      <div class="prose prose-invert prose-accent prose-headings:font-serif prose-p:font-sans max-w-none">
+      <div class="prose prose-invert prose-lg prose-headings:font-serif prose-p:font-sans max-w-none">
         {post
           ? <DocumentRenderer document={await post.content()} />
-          : <div set:html={noticia.body.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>')} />
+          : <div set:html={simpleArticleBodyToHtml(noticia.body)} />
         }
       </div>
 
@@ -103,4 +124,11 @@ const excerpt = noticia.data.excerpt ?? '';
   .prose p { @apply mb-6 text-lg text-gray-400; }
   .prose strong { @apply text-white font-bold; }
   .prose ul { @apply list-disc list-inside mb-6 text-gray-400; }
+  /* Enlaces del editor Keystatic (DocumentRenderer) siempre visibles como vínculo */
+  article .prose a {
+    @apply text-accent underline decoration-accent/70 underline-offset-[3px] transition-colors font-medium;
+  }
+  article .prose a:hover {
+    @apply text-white decoration-white;
+  }
 </style>

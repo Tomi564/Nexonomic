@@ -10,6 +10,7 @@ const posts = noticias
   .map(n => ({
     title: n.data.title,
     category: n.data.category,
+    author: (n.data.author ?? '').trim(),
     date: formatDate(n.data.date),
     excerpt: n.data.excerpt,
     image:
@@ -52,13 +53,16 @@ const posts = noticias
             </div>
 
             <div class="space-y-3">
-              <div class="flex items-center justify-between text-xs font-sans">
-                <span class="text-accent uppercase tracking-wider font-bold">
+              <div class="flex items-center justify-between gap-3 text-xs font-sans">
+                <span class="text-accent uppercase tracking-wider font-bold shrink-0">
                   {post.category}
                 </span>
-                <time class="text-gray-500">
-                  {post.date}
-                </time>
+                <p class="text-gray-500 text-right m-0 leading-snug">
+                  {post.author ? (
+                    <><span class="text-gray-400 normal-case tracking-normal">{post.author}</span><span> · </span></>
+                  ) : null}
+                  <time>{post.date}</time>
+                </p>
               </div>
 
               <h4 class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
