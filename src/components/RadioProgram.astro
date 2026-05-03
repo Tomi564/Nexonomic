@@ -1,29 +1,30 @@
 ---
 /**
- * Enlace al programa de radio (streaming, podcast, emisora).
- * Netlify: PUBLIC_RADIO_PROGRAM_URL = URL completa (Spotify, AM, web de radio, etc.)
- * Opcional: PUBLIC_RADIO_PROGRAM_TITLE, PUBLIC_RADIO_PROGRAM_TAGLINE
+ * Botón izquierdo: siempre al formulario de contacto (reuniones).
+ * Botón derecho: streaming en vivo (YouTube por defecto; sobreescribible).
  */
-const radioUrl =
-  typeof import.meta.env.PUBLIC_RADIO_PROGRAM_URL === 'string'
-    ? import.meta.env.PUBLIC_RADIO_PROGRAM_URL.trim()
-    : '';
+const streamsUrl =
+  (typeof import.meta.env.PUBLIC_RADIO_STREAM_URL === 'string' &&
+    import.meta.env.PUBLIC_RADIO_STREAM_URL.trim()) ||
+  'https://www.youtube.com/@ExceLente_Radio/streams';
+
 const title =
   (typeof import.meta.env.PUBLIC_RADIO_PROGRAM_TITLE === 'string' &&
     import.meta.env.PUBLIC_RADIO_PROGRAM_TITLE.trim()) ||
   'Nexonomic en la radio';
-const tagline =
+
+const bodyText =
   (typeof import.meta.env.PUBLIC_RADIO_PROGRAM_TAGLINE === 'string' &&
     import.meta.env.PUBLIC_RADIO_PROGRAM_TAGLINE.trim()) ||
-  'Entrevistas y análisis en audio: el mismo espacio editorial, en formato para escuchar.';
+  'Podés escucharnos todos los jueves de 17 a 18 hs. en ExceLente, "La Economía en Foco", el programa de radio de economía de la UCA.';
 ---
 
 <section
   id="radio"
   aria-labelledby="radio-heading"
-  class="relative py-20 md:py-24 bg-deep-bg scroll-mt-24 md:scroll-mt-28"
+  class="relative py-20 md:py-28 bg-deep-bg scroll-mt-24 md:scroll-mt-28 min-h-[min(28rem,55vh)] flex flex-col justify-center"
 >
-  <div class="max-w-7xl mx-auto px-6 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10 lg:gap-16">
       <div class="flex items-start gap-5 md:gap-6">
         <div
@@ -35,42 +36,32 @@ const tagline =
           </svg>
         </div>
         <div class="min-w-0">
-          <p class="font-sans text-accent tracking-[0.28em] uppercase text-xs mb-3 font-bold">Programa</p>
+          <p class="font-sans text-accent tracking-wide uppercase text-[11px] sm:text-xs mb-3 font-bold leading-snug max-w-md">
+            Radiofónicos en vivo
+          </p>
           <h2 id="radio-heading" class="font-serif text-3xl md:text-4xl text-white mb-4 leading-tight">
             {title}
           </h2>
           <p class="text-gray-400 font-sans text-base md:text-lg leading-relaxed max-w-xl">
-            {tagline}
+            {bodyText}
           </p>
         </div>
       </div>
 
       <div class="flex flex-col sm:flex-row flex-wrap gap-4 lg:justify-end lg:flex-shrink-0">
-        {radioUrl ? (
-          <a
-            href={radioUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center justify-center gap-2 px-8 py-4 bg-action hover:bg-accent text-white font-sans font-bold text-sm rounded-full transition-all duration-300 shadow-lg shadow-action/25 hover:shadow-accent/20 text-center"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" aria-hidden="true">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Escuchar programa
-          </a>
-        ) : (
-          <a
-            href="/#contact"
-            class="inline-flex items-center justify-center px-8 py-4 bg-action hover:bg-accent text-white font-sans font-bold text-sm rounded-full transition-all duration-300 shadow-lg shadow-action/25 text-center"
-          >
-            Consultá por el programa
-          </a>
-        )}
         <a
-          href="/#blog"
+          href="/#contact"
+          class="inline-flex items-center justify-center px-8 py-4 bg-action hover:bg-accent text-white font-sans font-bold text-sm rounded-full transition-all duration-300 shadow-lg shadow-action/25 text-center"
+        >
+          Consultá por el programa
+        </a>
+        <a
+          href={streamsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
           class="inline-flex items-center justify-center px-8 py-4 border border-white/20 hover:bg-white/5 text-white font-sans font-bold text-sm rounded-full transition-all duration-300 text-center"
         >
-          Artículos relacionados
+          Radiofónicos en vivo
         </a>
       </div>
     </div>

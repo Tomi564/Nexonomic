@@ -54,6 +54,10 @@
     mix-blend-mode: screen;
   }
 
+  .nav-link {
+    display: inline-block;
+  }
+
   .nav-link::after {
     content: '';
     position: absolute;
@@ -67,7 +71,7 @@
 
   .nav-link.active::after {
     width: 100%;
-    transition: width 0.4s ease-out;
+    transition: width 0.35s ease-out;
   }
 </style>
 
@@ -108,23 +112,29 @@
   menuOverlay?.addEventListener('click', closeMenu);
   mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
 
-  // Active nav link via IntersectionObserver
+  // Scrollspy: el bloque con mayor intersección gana (mejor para secciones bajas como #radio)
   const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link[data-nav]');
   const sections = ['about', 'blog', 'citas', 'radio', 'contact'];
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        navLinks.forEach(link => {
-          const isActive = link.dataset.nav === id;
-          link.classList.toggle('active', isActive);
-          link.classList.toggle('text-white', isActive);
-          link.classList.toggle('text-gray-300', !isActive);
-        });
-      }
+  function updateActiveNav(activeId) {
+    navLinks.forEach(link => {
+      const isActive = link.dataset.nav === activeId;
+      link.classList.toggle('active', isActive);
+      link.classList.toggle('text-white', isActive);
+      link.classList.toggle('text-gray-300', !isActive);
     });
-  }, { rootMargin: '-40% 0px -55% 0px' });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const intersecting = entries.filter(e => e.isIntersecting);
+      if (intersecting.length === 0) return;
+      intersecting.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+      const id = intersecting[0].target.id;
+      if (sections.includes(id)) updateActiveNav(id);
+    },
+    { threshold: [0, 0.08, 0.15, 0.25, 0.35, 0.5, 0.65, 0.8, 1], rootMargin: '-12% 0px -12% 0px' },
+  );
 
   sections.forEach(id => {
     const el = document.getElementById(id);
