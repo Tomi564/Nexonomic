@@ -1,49 +1,40 @@
 ---
-// src/components/Hero.astro — En móvil: imagen estática (menos GPU). En escritorio sin motion reducido: video.
+// src/components/Hero.astro — Mismo video de fondo en móvil y escritorio (muted + playsinline). Imagen estática solo si "menos movimiento".
 const poster = '/assets/img/Nexonomic_Logo_K_07.jpg';
 ---
 
 <section class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-deep-bg">
   
   <div class="absolute inset-0 w-full h-full z-0">
-    <!-- Solo móvil: sin video autoplay -->
-    <img
-      src={poster}
-      alt=""
-      class="hero-mobile-poster md:hidden absolute inset-0 w-full h-full object-cover opacity-40 grayscale"
-      decoding="async"
-      fetchpriority="high"
-    />
-
-    <!-- Escritorio: video (oculto si el usuario pidió menos movimiento) -->
-    <div class="hero-video-wrap absolute inset-0 hidden md:block">
+    <!-- Video en todos los anchos (iOS/Safari: playsinline + muted obligatorio para autoplay) -->
+    <div class="hero-video-wrap absolute inset-0">
       <video
-        class="w-full h-full object-cover opacity-40 grayscale"
+        class="h-full w-full object-cover grayscale opacity-50 md:opacity-40"
         autoplay
         muted
         loop
         playsinline
-        preload="metadata"
+        preload="auto"
         poster={poster}
       >
         <source src="/assets/video/hero.mp4" type="video/mp4" />
       </video>
     </div>
 
-    <!-- Fallback escritorio cuando prefers-reduced-motion -->
+    <!-- Sin video: "menos movimiento" del sistema → poster estático -->
     <div class="hero-static-desk absolute inset-0 z-[1] hidden">
       <img
         src={poster}
         alt=""
-        class="w-full h-full object-cover opacity-40 grayscale"
+        class="h-full w-full object-cover opacity-40 grayscale"
         decoding="async"
       />
     </div>
 
-    <div class="absolute inset-0 bg-gradient-to-b from-deep-bg/40 via-deep-bg/85 to-deep-bg z-10 pointer-events-none"></div>
-    <div class="blobs-desktop absolute inset-0 z-[2] md:block hidden pointer-events-none">
-      <div class="absolute top-1/4 -left-20 w-80 md:w-96 h-80 md:h-96 bg-action/15 md:bg-action/20 rounded-full blur-[64px] md:blur-[80px]"></div>
-      <div class="absolute bottom-1/4 -right-20 w-80 md:w-96 h-80 md:h-96 bg-accent/10 rounded-full blur-[64px] md:blur-[80px]"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-deep-bg/25 via-deep-bg/55 to-deep-bg z-10 pointer-events-none md:from-deep-bg/40 md:via-deep-bg/85 md:to-deep-bg"></div>
+    <div class="hero-blobs absolute inset-0 z-[2] pointer-events-none">
+      <div class="absolute top-1/4 -left-16 h-64 w-64 rounded-full bg-action/18 blur-[48px] md:-left-20 md:h-96 md:w-80 md:bg-action/20 md:blur-[80px] lg:w-96"></div>
+      <div class="absolute bottom-1/4 -right-16 h-64 w-64 rounded-full bg-accent/12 blur-[48px] md:-right-20 md:h-96 md:w-80 md:bg-accent/10 md:blur-[80px] lg:w-96"></div>
     </div>
   </div>
 
@@ -80,10 +71,10 @@ const poster = '/assets/img/Nexonomic_Logo_K_07.jpg';
 </section>
 
 <style>
-  /* Sin video en escritorio cuando el sistema pide menos movimiento */
-  @media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  /* Sin video cuando el sistema pide menos movimiento (cualquier tamaño de pantalla) */
+  @media (prefers-reduced-motion: reduce) {
     .hero-video-wrap { display: none !important; }
-    .blobs-desktop { display: none !important; }
+    .hero-blobs { display: none !important; }
     .hero-static-desk { display: block !important; }
   }
 

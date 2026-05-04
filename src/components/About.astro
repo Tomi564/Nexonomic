@@ -1,55 +1,75 @@
 ---
-// src/components/About.astro
+// src/components/About.astro — Móvil: foto tras el título; escritorio: foto a la izquierda.
 ---
 
-<section id="about" class="py-24 bg-deep-bg relative overflow-hidden">
+<section id="about" class="bg-deep-bg relative overflow-hidden py-16 md:py-24">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-      
-      <div class="relative order-2 md:order-1">
-        <div class="absolute -top-4 -left-4 w-full h-full border border-accent/20 rounded-[3rem] z-0 hidden sm:block"></div>
-        
-        <div class="relative z-10 aspect-[3/4] overflow-hidden rounded-[3rem] shadow-2xl">
-            <img 
-                src="/assets/img/lucas_img.jpeg"
-                alt="Lucas" 
-                class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000 ease-in-out"
-            />
-            
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16 md:items-stretch">
+      <!-- Intro (móvil primero) -->
+      <div class="order-1 md:order-none md:col-start-2 md:row-start-1">
+        <h2 class="font-sans text-accent tracking-[0.2em] uppercase text-xs mb-4 font-bold">El Programa</h2>
+        <h3 class="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-0 leading-tight">
+          La economía, en voz <br />
+          <span class="text-gray-500 italic font-light">de sus protagonistas.</span>
+        </h3>
+      </div>
+
+      <!-- Foto: móvil justo después del título; escritorio columna izquierda ocupando dos filas -->
+      <div
+        class="relative order-2 md:order-none md:col-start-1 md:row-start-1 md:row-span-2 md:self-center"
+      >
+        <div
+          class="absolute -top-4 -left-4 z-0 hidden h-full w-full rounded-[2rem] border border-accent/20 sm:block md:rounded-[3rem]"
+        >
+        </div>
+
+        <div
+          class="relative z-10 mx-auto aspect-[3/4] w-full max-w-sm overflow-hidden rounded-[2rem] shadow-2xl sm:max-w-md md:mx-0 md:max-w-none md:rounded-[3rem]"
+        >
+          <img
+            src="/assets/img/lucas_img.jpeg"
+            alt="Lucas"
+            class="h-full w-full object-cover grayscale transition-all duration-1000 ease-in-out hover:grayscale-0"
+          />
         </div>
       </div>
 
-      <div class="order-1 md:order-2">
-        <h2 class="font-sans text-accent tracking-[0.2em] uppercase text-xs mb-4 font-bold">El Programa</h2>
-        <h3 class="font-serif text-3xl md:text-4xl lg:text-5xl text-white mb-8 leading-tight">
-          La economía, en voz <br/>
-          <span class="text-gray-500 italic font-light">de sus protagonistas.</span>
-        </h3>
-
-        <div class="space-y-6 text-gray-400 font-sans text-lg leading-relaxed">
+      <!-- Texto + CTA (móvil al final) -->
+      <div class="order-3 md:order-none md:col-start-2 md:row-start-2">
+        <div class="space-y-5 text-gray-400 font-sans text-base leading-relaxed md:space-y-6 md:text-lg">
           <p>
-            Nexonomic es un programa de televisión de entrevistas mensuales, realizado en colaboración con la Universidad Católica Argentina (UCA), que conecta distintas miradas sobre la economía.
+            Nexonomic es un programa de televisión de entrevistas mensuales, realizado en colaboración con la Universidad
+            Católica Argentina (UCA), que conecta distintas miradas sobre la economía.
           </p>
           <p>
-            En cada episodio, conversamos con empresarios, académicos y referentes del sector público para entender cómo se toman decisiones y cómo impactan en la realidad.
+            En cada episodio, conversamos con empresarios, académicos y referentes del sector público para entender cómo
+            se toman decisiones y cómo impactan en la realidad.
           </p>
           <p>
             Un espacio donde distintas perspectivas se cruzan para pensar la economía desde una dimensión más humana.
           </p>
         </div>
 
-        <div class="mt-12 pt-8 border-t border-white/10">
+        <div class="mt-8 border-t border-white/10 pt-6 md:mt-10 md:pt-8">
           <a href="#contact" class="inline-flex items-center gap-4 group">
-            <span class="px-8 py-4 bg-action hover:bg-accent text-white font-bold rounded-full transition-all duration-300 shadow-lg shadow-action/20 hover:shadow-accent/40">
+            <span
+              class="rounded-full bg-action px-8 py-4 font-bold text-white shadow-lg shadow-action/20 transition-all duration-300 hover:bg-accent hover:shadow-accent/40"
+            >
               Agendar Conversación
             </span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-accent group-hover:translate-x-2 transition-transform">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-5 w-5 text-accent transition-transform group-hover:translate-x-2"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"></path>
             </svg>
           </a>
         </div>
       </div>
-
     </div>
   </div>
 </section>

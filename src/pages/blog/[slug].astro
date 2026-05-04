@@ -1,24 +1,8 @@
 ---
 // src/pages/blog/[slug].astro
-import { createReader } from '@keystatic/core/reader';
-import keystaticConfig from '../../../keystatic.config';
 import { getNoticias, formatDate, normalizePublicUrl } from '../../utils/noticias';
+import { articleBodyMarkdownToHtml } from '../../utils/articleBody';
 import Layout from '../../layouts/Layout.astro';
-import { DocumentRenderer } from '@keystatic/core/renderer';
-
-/** Fallback si no hay reader: escapa HTML, negritas, enlaces [texto](url) y saltos de línea */
-function simpleArticleBodyToHtml(raw: string): string {
-  const esc = (s: string) =>
-    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  let t = esc(raw);
-  t = t.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  t = t.replace(
-    /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
-    '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>',
-  );
-  t = t.replace(/\n/g, '<br />');
-  return t;
-}
 
 const { slug } = Astro.params;
 
@@ -33,8 +17,7 @@ const noticia = noticias[index];
 const prev = index > 0 ? noticias[index - 1] : null;
 const next = index < noticias.length - 1 ? noticias[index + 1] : null;
 
-const reader = createReader(process.cwd(), keystaticConfig);
-const post = await reader.collections.noticias.read(slug);
+const articleHtml = articleBodyMarkdownToHtml(noticia.body);
 
 const { title, category } = noticia.data;
 const author = (noticia.data.author ?? '').trim();
@@ -85,12 +68,7 @@ const excerpt = noticia.data.excerpt ?? '';
         ) : null}
       </header>
 
-      <div class="prose prose-invert prose-lg prose-headings:font-serif prose-p:font-sans max-w-none">
-        {post
-          ? <DocumentRenderer document={await post.content()} />
-          : <div set:html={simpleArticleBodyToHtml(noticia.body)} />
-        }
-      </div>
+      <div class="prose prose-invert prose-lg prose-headings:font-serif prose-p:font-sans max-w-none article-md-body" set:html={articleHtml} />
 
       <footer class="mt-12 md:mt-16 pt-8 border-t border-white/10">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
@@ -120,15 +98,20 @@ const excerpt = noticia.data.excerpt ?? '';
 </Layout>
 
 <style is:global>
-  .prose h2 { @apply font-serif text-2xl text-white mt-12 mb-4; }
-  .prose p { @apply mb-6 text-lg text-gray-400; }
-  .prose strong { @apply text-white font-bold; }
-  .prose ul { @apply list-disc list-inside mb-6 text-gray-400; }
-  /* Enlaces del editor Keystatic (DocumentRenderer) siempre visibles como vínculo */
-  article .prose a {
+  .article-md-body h2 { @apply font-serif text-2xl text-white mt-12 mb-4; }
+  .article-md-body h3 { @apply font-serif text-xl text-white mt-10 mb-3; }
+  .article-md-body p { @apply mb-6 text-lg text-gray-400; }
+  .article-md-body strong { @apply text-white font-bold; }
+  .article-md-body em { @apply italic text-gray-300; }
+  .article-md-body ul { @apply list-disc list-inside mb-6 text-gray-400; }
+  .article-md-body ol { @apply list-decimal list-inside mb-6 text-gray-400; }
+  .article-md-body hr { @apply border-0 border-t border-white/20 my-10; }
+  .article-md-body img { @apply rounded-lg my-8 w-full max-h-[32rem] object-contain bg-black/20; }
+  .article-md-body blockquote { @apply border-l-4 border-accent/50 pl-4 italic text-gray-400 my-8; }
+  article .article-md-body a {
     @apply text-accent underline decoration-accent/70 underline-offset-[3px] transition-colors font-medium;
   }
-  article .prose a:hover {
+  article .article-md-body a:hover {
     @apply text-white decoration-white;
   }
 </style>

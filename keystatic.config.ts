@@ -19,6 +19,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/noticias/*',
       format: { contentField: 'content' },
+      columns: ['title', 'date'],
       schema: {
         title: fields.slug({ name: { label: 'Título' } }),
         date: fields.date({ label: 'Fecha de publicación' }),
@@ -63,8 +64,14 @@ export default config({
       label: 'Citas',
       slugField: 'author',
       path: 'src/content/citas/*',
+      columns: ['author', 'fechaPublicacion', 'role'],
       schema: {
         author: fields.slug({ name: { label: 'Autor' } }),
+        fechaPublicacion: fields.date({
+          label: 'Fecha de salida',
+          description: 'Para ordenar y reconocer entradas en el panel.',
+          validation: { isRequired: false },
+        }),
         role: fields.text({ label: 'Cargo / Descripción' }),
         text: fields.text({ label: 'Cita', multiline: true }),
       },

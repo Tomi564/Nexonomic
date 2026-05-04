@@ -1,0 +1,62 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCitas } from '../../utils/citas';
+import { formatDate } from '../../utils/noticias';
+
+const citas = getCitas().sort((a, b) => {
+	const da = a.fechaPublicacion || '';
+	const db = b.fechaPublicacion || '';
+	if (da !== db) return db.localeCompare(da);
+	return a.author.localeCompare(b.author);
+});
+---
+
+<Layout title="Citas | Nexonomic">
+	<header class="pt-28 md:pt-40 pb-12 md:pb-16 bg-deep-bg border-b border-white/10">
+		<div class="max-w-7xl mx-auto px-6">
+			<p class="font-sans text-accent tracking-widest uppercase text-xs mb-4 font-bold">Archivo</p>
+			<h1 class="font-serif text-4xl md:text-5xl text-white">Todas las citas</h1>
+			<p class="mt-4 text-gray-500 font-sans max-w-2xl leading-relaxed">
+				Selección de ideas y voces que inspiran el proyecto.
+			</p>
+		</div>
+	</header>
+
+	<main class="bg-deep-bg min-h-screen py-12 md:py-20">
+		<div class="max-w-7xl mx-auto px-6">
+			{citas.length === 0 ? (
+				<p class="text-gray-500 font-sans text-center py-20">No hay citas publicadas aún.</p>
+			) : (
+				<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+					{citas.map((c) => (
+						<article class="group relative p-8 bg-white/5 border border-white/10 rounded-3xl hover:border-accent/50 transition-all duration-300">
+							<span class="absolute -top-4 left-6 text-6xl text-accent/20 font-serif group-hover:text-accent/40 transition-colors" aria-hidden="true">
+								&quot;
+							</span>
+							<blockquote class="relative z-10">
+								<p class="font-serif text-lg text-gray-200 italic leading-relaxed mb-6 group-hover:text-white transition-colors">
+									&quot;{c.text}&quot;
+								</p>
+								<footer class="flex flex-col gap-1">
+									<cite class="font-sans text-accent font-bold not-italic tracking-wider uppercase text-xs">{c.author}</cite>
+									<span class="text-gray-500 text-xs font-sans">{c.role}</span>
+									{c.fechaPublicacion ? (
+										<time class="text-gray-600 text-xs font-sans mt-2" datetime={c.fechaPublicacion}>
+											{formatDate(c.fechaPublicacion)}
+										</time>
+									) : null}
+								</footer>
+							</blockquote>
+						</article>
+					))}
+				</div>
+			)}
+
+			<div class="mt-20 pt-8 border-t border-white/10">
+				<a href="/#citas" class="text-accent hover:text-white transition-colors font-sans text-sm">
+					← Volver a la sección en inicio
+				</a>
+			</div>
+		</div>
+	</main>
+</Layout>
