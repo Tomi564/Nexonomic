@@ -27,7 +27,7 @@ function ogAbsolute(raw: string): string {
 
 const canonicalHref = new URL(Astro.url.pathname, siteBase.origin).href;
 const ogImageHref = ogAbsolute(ogImage);
-const faviconVersion = '20260507';
+const faviconVersion = '20260508';
 ---
 
 <!doctype html>
@@ -36,6 +36,7 @@ const faviconVersion = '20260507';
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" href={`/favicon.ico?v=${faviconVersion}`} sizes="any" />
 		<link rel="icon" type="image/png" sizes="32x32" href={`/favicon.png?v=${faviconVersion}`} />
 		<link rel="icon" type="image/png" sizes="16x16" href={`/favicon.png?v=${faviconVersion}`} />
 		<link rel="shortcut icon" href={`/favicon.png?v=${faviconVersion}`} />
