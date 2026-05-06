@@ -27,6 +27,7 @@ function ogAbsolute(raw: string): string {
 
 const canonicalHref = new URL(Astro.url.pathname, siteBase.origin).href;
 const ogImageHref = ogAbsolute(ogImage);
+const faviconVersion = '20260506';
 ---
 
 <!doctype html>
@@ -35,9 +36,11 @@ const ogImageHref = ogAbsolute(ogImage);
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
-		<link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
-		<link rel="apple-touch-icon" href="/favicon.png" />
+		<link rel="icon" type="image/svg+xml" href={`/favicon.svg?v=${faviconVersion}`} />
+		<link rel="icon" type="image/png" sizes="32x32" href={`/favicon.png?v=${faviconVersion}`} />
+		<link rel="icon" type="image/png" sizes="16x16" href={`/favicon.png?v=${faviconVersion}`} />
+		<link rel="shortcut icon" href={`/favicon.png?v=${faviconVersion}`} />
+		<link rel="apple-touch-icon" sizes="180x180" href={`/favicon.png?v=${faviconVersion}`} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 		<link rel="canonical" href={canonicalHref} />
