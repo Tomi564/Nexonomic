@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ContentCard from '../../components/ContentCard.astro';
+import {
+  formatDate,
+  getProgramas,
+  sortProgramasRecentFirst,
+  youtubeThumbnailUrl,
+} from '../../utils/programas';
+
+const programas = sortProgramasRecentFirst(await getProgramas()).map((p) => {
+  const guest = (p.data.guest ?? '').trim();
+  const date = formatDate(p.data.date);
+  const ep = p.data.episodeNumber ? `Ep. ${p.data.episodeNumber}` : 'Programa';
+  return {
+    title: p.data.title,
+    category: ep,
+    meta: guest ? `${guest} · ${date}` : date,
+    excerpt: p.data.excerpt ?? '',
+    image: youtubeThumbnailUrl(p.data.youtubeUrl ?? p.data.youtubeId),
+    link: `/programas/${p.slug}`,
+  };
+});
+---
+
+<Layout title="Programas | Nexonomic">
+  <header class="pt-28 md:pt-40 pb-12 md:pb-16 bg-deep-bg border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6">
+      <p class="font-sans text-accent tracking-widest uppercase text-xs mb-4 font-bold">Episodios</p>
+      <h1 class="font-serif text-4xl md:text-5xl text-white">Programas</h1>
+    </div>
+  </header>
+
+  <main class="bg-deep-bg min-h-screen py-12 md:py-20">
+    <div class="max-w-7xl mx-auto px-6">
+
+      {programas.length === 0 ? (
+        <p class="text-gray-500 font-sans text-center py-20">No hay programas publicados aún.</p>
+      ) : (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {programas.map((programa) => (
+            <ContentCard
+              title={programa.title}
+              image={programa.image}
+              href={programa.link}
+              category={programa.category}
+              meta={programa.meta}
+              excerpt={programa.excerpt}
+              isVideo={true}
+              ctaLabel="Ver episodio →"
+              titleAs="h2"
+            />
+          ))}
+        </div>
+      )}
+
+      <div class="mt-20 pt-8 border-t border-white/10">
+        <a href="/" class="text-accent hover:text-white transition-colors font-sans text-sm">
+          ← Volver al inicio
+        </a>
+      </div>
+
+    </div>
+  </main>
+</Layout>

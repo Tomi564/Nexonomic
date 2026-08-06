@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { articleBodyMarkdownToHtml } from '../../utils/articleBody';
+import {
+  formatDate,
+  getProgramas,
+  resolveProgramaYoutubeId,
+  sortProgramasRecentFirst,
+  youtubeThumbnailUrl,
+} from '../../utils/programas';
+
+const { slug } = Astro.params;
+
+const programas = sortProgramasRecentFirst(await getProgramas());
+const index = programas.findIndex((p) => p.slug === slug);
+
+if (index === -1) {
+  return Astro.redirect('/404');
+}
+
+const programa = programas[index];
+const prev = index < programas.length - 1 ? programas[index + 1] : null;
+const next = index > 0 ? programas[index - 1] : null;
+
+const bodyHtml = programa.body.trim()
+  ? articleBodyMarkdownToHtml(programa.body)
+  : '';
+
+const title = programa.data.title ?? '';
+const guest = (programa.data.guest ?? '').trim();
+const guestRole = (programa.data.guestRole ?? '').trim();
+const date = formatDate(programa.data.date);
+const excerpt = programa.data.excerpt ?? '';
+const youtubeId = resolveProgramaYoutubeId(programa.data);
+const episodeNumber = programa.data.episodeNumber ?? '';
+const ogImage = (youtubeId ? youtubeThumbnailUrl(youtubeId) : '') || '/Nexonomic_Logo_K-03.jpg';
+---
+
+<Layout title={`${title} | Nexonomic`} description={excerpt} ogImage={ogImage}>
+  <article class="pt-24 md:pt-32 pb-16 md:pb-24 bg-[#080a0c] min-h-screen">
+    <div class="max-w-3xl mx-auto px-6">
+
+      <div class="mb-8">
+        <a href="/programas" class="inline-flex items-center gap-2 text-gray-500 hover:text-accent transition-colors font-sans text-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Todos los programas
+        </a>
+      </div>
+
+      {youtubeId ? (
+        <div class="mb-10 aspect-video overflow-hidden rounded-2xl bg-black ring-1 ring-white/10">
+          <iframe
+            class="h-full w-full"
+            src={`https://www.youtube.com/embed/${youtubeId}`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+          ></iframe>
+        </div>
+      ) : null}
+
+      <header class="mb-12">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-accent uppercase tracking-widest text-xs font-bold mb-4">
+          {episodeNumber ? <span>Episodio {episodeNumber}</span> : <span>Programa</span>}
+          {date ? (
+            <>
+              <span class="text-gray-600" aria-hidden="true">•</span>
+              <time class="text-gray-500 normal-case tracking-normal font-sans font-semibold">{date}</time>
+            </>
+          ) : null}
+        </div>
+        <h1 class="font-serif text-4xl md:text-5xl text-white leading-tight mb-6">
+          {title}
+        </h1>
+        {guest ? (
+          <p class="font-sans text-lg text-gray-300">
+            <span class="text-white font-semibold">{guest}</span>
+            {guestRole ? <span class="text-gray-500"> — {guestRole}</span> : null}
+          </p>
+        ) : null}
+      </header>
+
+      {bodyHtml ? (
+        <div class="prose prose-invert prose-lg prose-headings:font-serif prose-p:font-sans max-w-none article-md-body" set:html={bodyHtml} />
+      ) : null}
+
+      <footer class="mt-12 md:mt-16 pt-8 border-t border-white/10">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+          <div>
+            {prev && (
+              <a href={`/programas/${prev.slug}`} class="group flex flex-col gap-1">
+                <span class="text-xs text-gray-500 font-sans uppercase tracking-widest">← Anterior</span>
+                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-2 sm:line-clamp-1">{prev.data.title}</span>
+              </a>
+            )}
+          </div>
+          <a href="/programas" class="text-gray-500 hover:text-accent transition-colors font-sans text-xs uppercase tracking-widest flex-shrink-0 order-first sm:order-none">
+            Archivo
+          </a>
+          <div class="sm:text-right">
+            {next && (
+              <a href={`/programas/${next.slug}`} class="group flex flex-col gap-1 sm:items-end">
+                <span class="text-xs text-gray-500 font-sans uppercase tracking-widest">Siguiente →</span>
+                <span class="font-serif text-white group-hover:text-accent transition-colors line-clamp-2 sm:line-clamp-1">{next.data.title}</span>
+              </a>
+            )}
+          </div>
+        </div>
+      </footer>
+    </div>
+  </article>
+</Layout>
+
+<style is:global>
+  .article-md-body h2 { @apply font-serif text-2xl text-white mt-12 mb-4; }
+  .article-md-body h3 { @apply font-serif text-xl text-white mt-10 mb-3; }
+  .article-md-body p { @apply mb-6 text-lg text-gray-400; }
+  .article-md-body strong { @apply text-white font-bold; }
+  .article-md-body em { @apply italic text-gray-300; }
+  .article-md-body ul { @apply list-disc list-inside mb-6 text-gray-400; }
+  .article-md-body ol { @apply list-decimal list-inside mb-6 text-gray-400; }
+  .article-md-body hr { @apply border-0 border-t border-white/20 my-10; }
+  .article-md-body img { @apply rounded-lg my-8 w-full max-h-[32rem] object-contain bg-black/20; }
+  .article-md-body blockquote { @apply border-l-4 border-accent/50 pl-4 italic text-gray-400 my-8; }
+  article .article-md-body a {
+    @apply text-accent underline decoration-accent/70 underline-offset-[3px] transition-colors font-medium;
+  }
+  article .article-md-body a:hover {
+    @apply text-white decoration-white;
+  }
+</style>

@@ -1,20 +1,21 @@
 ---
 // src/components/Hero.astro — Mismo video de fondo en móvil y escritorio (muted + playsinline). Imagen estática solo si "menos movimiento".
-const poster = '/assets/img/Nexonomic_Logo_K_07.jpg';
+const poster = '/assets/img/hero-poster.jpg';
 ---
 
-<section class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-deep-bg">
+<section id="hero" class="relative min-h-screen w-full overflow-hidden flex items-center justify-center bg-deep-bg">
   
   <div class="absolute inset-0 w-full h-full z-0">
     <!-- Video en todos los anchos (iOS/Safari: playsinline + muted obligatorio para autoplay) -->
     <div class="hero-video-wrap absolute inset-0">
       <video
-        class="h-full w-full object-cover grayscale opacity-50 md:opacity-40"
+        id="hero-video"
+        class="h-full w-full object-cover opacity-50 md:opacity-40"
         autoplay
         muted
         loop
         playsinline
-        preload="auto"
+        preload="metadata"
         poster={poster}
       >
         <source src="/assets/video/hero.mp4" type="video/mp4" />
@@ -26,15 +27,16 @@ const poster = '/assets/img/Nexonomic_Logo_K_07.jpg';
       <img
         src={poster}
         alt=""
-        class="h-full w-full object-cover opacity-40 grayscale"
+        class="h-full w-full object-cover opacity-40"
         decoding="async"
       />
     </div>
 
     <div class="absolute inset-0 bg-gradient-to-b from-deep-bg/25 via-deep-bg/55 to-deep-bg z-10 pointer-events-none md:from-deep-bg/40 md:via-deep-bg/85 md:to-deep-bg"></div>
-    <div class="hero-blobs absolute inset-0 z-[2] pointer-events-none">
-      <div class="absolute top-1/4 -left-16 h-64 w-64 rounded-full bg-action/18 blur-[48px] md:-left-20 md:h-96 md:w-80 md:bg-action/20 md:blur-[80px] lg:w-96"></div>
-      <div class="absolute bottom-1/4 -right-16 h-64 w-64 rounded-full bg-accent/12 blur-[48px] md:-right-20 md:h-96 md:w-80 md:bg-accent/10 md:blur-[80px] lg:w-96"></div>
+    <!-- Glow decorativo con gradientes (sin blur CSS: mucho más barato en compositing) -->
+    <div class="hero-blobs absolute inset-0 z-[2] pointer-events-none" aria-hidden="true">
+      <div class="absolute top-1/4 -left-16 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,rgba(25,27,164,0.28)_0%,transparent_70%)] md:-left-20 md:h-96 md:w-80 lg:w-96"></div>
+      <div class="absolute bottom-1/4 -right-16 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,rgba(60,194,162,0.18)_0%,transparent_70%)] md:-right-20 md:h-96 md:w-80 lg:w-96"></div>
     </div>
   </div>
 
@@ -69,6 +71,33 @@ const poster = '/assets/img/Nexonomic_Logo_K_07.jpg';
     </svg>
   </a>
 </section>
+
+<script>
+  function setupHeroVideoObserver() {
+    const section = document.getElementById('hero');
+    const video = document.getElementById('hero-video') as HTMLVideoElement | null;
+    if (!section || !video) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const playPromise = video.play();
+            if (playPromise?.catch) playPromise.catch(() => {});
+          } else {
+            video.pause();
+          }
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(section);
+  }
+
+  setupHeroVideoObserver();
+  document.addEventListener('astro:page-load', setupHeroVideoObserver);
+</script>
 
 <style>
   /* Sin video cuando el sistema pide menos movimiento (cualquier tamaño de pantalla) */

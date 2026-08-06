@@ -81,6 +81,44 @@ export default config({
         text: fields.text({ label: 'Cita', multiline: true }),
       },
     }),
+    programas: collection({
+      label: 'Programas',
+      slugField: 'title',
+      path: 'src/content/programas/*',
+      format: { contentField: 'content' },
+      columns: ['title', 'date', 'guest'],
+      schema: {
+        title: fields.slug({ name: { label: 'Título' } }),
+        guest: fields.text({
+          label: 'Invitado',
+          description: 'Nombre del invitado (requerido).',
+        }),
+        guestRole: fields.text({
+          label: 'Cargo / rol del invitado',
+          description: 'Opcional. Aparece junto al nombre en la ficha del episodio.',
+        }),
+        date: fields.date({ label: 'Fecha de emisión' }),
+        excerpt: fields.text({ label: 'Bajada / resumen corto', multiline: true }),
+        youtubeUrl: fields.text({
+          label: 'Link de YouTube',
+          description: 'Pegá la URL completa del video de YouTube (la que te da el botón Compartir)',
+        }),
+        episodeNumber: fields.integer({
+          label: 'Número de episodio',
+          validation: { isRequired: true },
+        }),
+        content: fields.document({
+          label: 'Transcripción / resumen extendido',
+          formatting: true,
+          dividers: true,
+          links: true,
+          images: {
+            directory: 'public/images/programas',
+            publicPath: '/images/programas',
+          },
+        }),
+      },
+    }),
     documentos: collection({
       label: 'Documentos',
       slugField: 'title',

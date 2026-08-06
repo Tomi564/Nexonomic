@@ -1,0 +1,72 @@
+---
+import ContentCard from './ContentCard.astro';
+import {
+  formatDate,
+  getProgramas,
+  sortProgramasRecentFirst,
+  youtubeThumbnailUrl,
+} from '../utils/programas';
+
+const programas = sortProgramasRecentFirst(await getProgramas())
+  .slice(0, 3)
+  .map((p) => {
+    const guest = (p.data.guest ?? '').trim();
+    const date = formatDate(p.data.date);
+    const ep = p.data.episodeNumber ? `Ep. ${p.data.episodeNumber}` : 'Programa';
+    return {
+      title: p.data.title,
+      category: ep,
+      meta: guest ? `${guest} · ${date}` : date,
+      excerpt: p.data.excerpt ?? '',
+      image: youtubeThumbnailUrl(p.data.youtubeUrl ?? p.data.youtubeId),
+      link: `/programas/${p.slug}`,
+    };
+  });
+---
+
+{programas.length > 0 && (
+<section id="programas-preview" class="py-16 md:py-20 bg-deep-bg">
+  <div class="max-w-7xl mx-auto px-6">
+
+    <div class="flex justify-between items-end mb-10 border-b border-white/10 pb-6">
+      <div>
+        <h2 class="font-sans text-accent tracking-widest uppercase text-sm mb-2 font-semibold">
+          Televisión
+        </h2>
+        <h3 class="font-serif text-3xl md:text-4xl text-white">
+          Programas
+        </h3>
+      </div>
+      <a href="/programas" class="hidden md:flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm font-sans">
+        Ver todos los programas
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+        </svg>
+      </a>
+    </div>
+
+    <div class={`grid grid-cols-1 gap-8 ${programas.length === 1 ? 'md:grid-cols-1 md:max-w-xl' : programas.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
+      {programas.map((programa) => (
+        <ContentCard
+          title={programa.title}
+          image={programa.image}
+          href={programa.link}
+          category={programa.category}
+          meta={programa.meta}
+          excerpt={programa.excerpt}
+          isVideo={true}
+          ctaLabel="Ver episodio →"
+          titleAs="h4"
+        />
+      ))}
+    </div>
+
+    <div class="mt-10 md:hidden">
+      <a href="/programas" class="inline-flex items-center gap-2 text-gray-500 hover:text-white transition-colors text-sm font-sans">
+        Ver todos los programas →
+      </a>
+    </div>
+
+  </div>
+</section>
+)}

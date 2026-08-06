@@ -1,0 +1,83 @@
+---
+interface Props {
+  title: string;
+  image: string;
+  href: string;
+  /** Texto libre (fecha, autor, etc.). Si hay `category`, va a la derecha. */
+  meta?: string;
+  /** Etiqueta en accent a la izquierda (ej. categoría del blog). */
+  category?: string;
+  excerpt: string;
+  isVideo?: boolean;
+  ctaLabel?: string;
+  /** Nivel de heading del título (h4 en preview home, h2 en listados). */
+  titleAs?: 'h2' | 'h3' | 'h4';
+}
+
+const {
+  title,
+  image,
+  href,
+  meta = '',
+  category = '',
+  excerpt,
+  isVideo = false,
+  ctaLabel = 'Leer artículo →',
+  titleAs = 'h2',
+} = Astro.props;
+
+const TitleTag = titleAs;
+---
+
+<article class="group">
+  <a href={href} class="block">
+    <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-2xl">
+      <img
+        src={image}
+        alt={title}
+        class="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+        loading="lazy"
+        decoding="async"
+        data-yt-thumb={isVideo ? '1' : undefined}
+        onload="if (this.dataset.ytThumb === '1' && this.naturalWidth > 0 && this.naturalWidth <= 120 && this.src.includes('/maxresdefault.jpg')) { this.src = this.src.replace('/maxresdefault.jpg', '/hqdefault.jpg'); }"
+        onerror="this.onerror=null; if (this.src.includes('/maxresdefault.jpg')) { this.src = this.src.replace('/maxresdefault.jpg', '/hqdefault.jpg'); } else if (this.src.includes('/hqdefault.jpg')) { this.src = this.src.replace('/hqdefault.jpg', '/mqdefault.jpg'); }"
+      />
+      {isVideo && (
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none" aria-hidden="true">
+          <span class="flex h-14 w-14 items-center justify-center rounded-full bg-black/55 text-white shadow-lg backdrop-blur-sm ring-1 ring-white/25 transition-transform duration-300 group-hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 h-6 w-6">
+              <path d="M8 5.14v13.72L19 12 8 5.14z" />
+            </svg>
+          </span>
+        </div>
+      )}
+    </div>
+
+    <div class="space-y-3">
+      {(category || meta) && (
+        <div class="flex items-center justify-between gap-3 text-xs font-sans">
+          {category ? (
+            <span class="text-accent uppercase tracking-wider font-bold shrink-0">{category}</span>
+          ) : (
+            <span class="text-accent uppercase tracking-wider font-bold shrink-0">{meta}</span>
+          )}
+          {category && meta ? (
+            <p class="text-gray-500 text-right m-0 leading-snug">{meta}</p>
+          ) : null}
+        </div>
+      )}
+
+      <TitleTag class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
+        {title}
+      </TitleTag>
+
+      <p class="font-sans text-sm text-gray-400 line-clamp-3 leading-relaxed">
+        {excerpt}
+      </p>
+
+      <span class="inline-block mt-2 text-sm text-white border-b border-transparent group-hover:border-action transition-all">
+        {ctaLabel}
+      </span>
+    </div>
+  </a>
+</article>

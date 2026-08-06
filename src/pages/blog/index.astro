@@ -1,22 +1,26 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ContentCard from '../../components/ContentCard.astro';
 import { getNoticias, formatDate, normalizePublicUrl } from '../../utils/noticias';
 
 const noticias = await getNoticias();
 
 const posts = noticias
   .sort((a, b) => (b.data.date ?? '').localeCompare(a.data.date ?? ''))
-  .map(n => ({
-    title: n.data.title,
-    category: n.data.category,
-    author: (n.data.author ?? '').trim(),
-    date: formatDate(n.data.date),
-    excerpt: n.data.excerpt,
-    image:
-      normalizePublicUrl(n.data.image) ||
-      'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
-    link: `/blog/${n.slug}`,
-  }));
+  .map(n => {
+    const author = (n.data.author ?? '').trim();
+    const date = formatDate(n.data.date);
+    return {
+      title: n.data.title,
+      category: n.data.category,
+      meta: author ? `${author} · ${date}` : date,
+      excerpt: n.data.excerpt,
+      image:
+        normalizePublicUrl(n.data.image) ||
+        'https://images.unsplash.com/photo-1611974765270-ca1258634369?q=80&w=2064&auto=format&fit=crop',
+      link: `/blog/${n.slug}`,
+    };
+  });
 ---
 
 <Layout title="Artículos | Nexonomic">
@@ -35,37 +39,15 @@ const posts = noticias
       ) : (
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {posts.map((post) => (
-            <article class="group">
-              <a href={post.link} class="block">
-                <div class="relative overflow-hidden aspect-[16/10] mb-4 bg-gray-800 rounded-2xl">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    class="w-full h-full object-cover transform group-hover:scale-[1.02] transition-transform duration-500 ease-out"
-                  />
-                </div>
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between gap-3 text-xs font-sans">
-                    <span class="text-accent uppercase tracking-wider font-bold shrink-0">{post.category}</span>
-                    <p class="text-gray-500 text-right m-0 leading-snug">
-                      {post.author ? (
-                        <><span class="text-gray-400 normal-case tracking-normal">{post.author}</span><span> · </span></>
-                      ) : null}
-                      <time>{post.date}</time>
-                    </p>
-                  </div>
-                  <h2 class="font-serif text-xl text-white group-hover:text-accent transition-colors leading-snug">
-                    {post.title}
-                  </h2>
-                  <p class="font-sans text-sm text-gray-400 line-clamp-3 leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                  <span class="inline-block mt-2 text-sm text-white border-b border-transparent group-hover:border-action transition-all">
-                    Leer artículo →
-                  </span>
-                </div>
-              </a>
-            </article>
+            <ContentCard
+              title={post.title}
+              image={post.image}
+              href={post.link}
+              category={post.category}
+              meta={post.meta}
+              excerpt={post.excerpt}
+              titleAs="h2"
+            />
           ))}
         </div>
       )}

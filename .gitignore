@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# Media backups (originals before compression)
+_media_backups/
